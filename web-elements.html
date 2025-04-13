@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selenium Practice - WebElements & Dropdowns</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #fef4ff;
+        }
+        h1, h2, h3 {
+            color: #9c0a9c;
+            border-bottom: 2px solid #e83ae8;
+            padding-bottom: 8px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .method-section, .dropdown-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e270e2;
+            box-shadow: 0 3px 6px rgba(156, 10, 156, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #9c0a9c;
+        }
+        input[type="text"], 
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e270e2;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="text"]:focus, 
+        input[type="email"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #9c0a9c;
+            box-shadow: 0 0 5px rgba(156, 10, 156, 0.3);
+        }
+        input[disabled] {
+            background-color: #f8e8fc;
+            cursor: not-allowed;
+        }
+        select[multiple] {
+            height: 120px;
+        }
+        button {
+            background-color: #c20cc2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #9c0a9c;
+        }
+        .checkbox-group {
+            margin: 10px 0;
+        }
+        .result {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            min-height: 20px;
+            border: 1px solid #e270e2;
+        }
+        .hidden {
+            display: none;
+        }
+        .hint {
+            font-style: italic;
+            color: #9c0a9c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .method-info {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            border: 1px dashed #e270e2;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border: 2px solid #e270e2;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #e270e2;
+        }
+        th {
+            background-color: #faeaff;
+            color: #9c0a9c;
+        }
+        .main-tabs {
+            display: flex;
+            overflow: hidden;
+            border: 1px solid #e270e2;
+            background-color: #faeaff;
+            border-radius: 8px 8px 0 0;
+        }
+        .main-tabs button {
+            flex: 1;
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            margin-top: 0;
+            border-radius: 0;
+            color: #9c0a9c;
+        }
+        .main-tabs button:hover {
+            background-color: #f5d5f5;
+        }
+        .main-tabs button.active {
+            background-color: #c20cc2;
+            color: white;
+        }
+        .main-tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #e270e2;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            animation: fadeEffect 1s;
+        }
+        .tab {
+            overflow: hidden;
+            border: 1px solid #e270e2;
+            background-color: #faeaff;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+        }
+        .tab button {
+            flex: 1;
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px 16px;
+            transition: 0.3s;
+            color: #9c0a9c;
+            margin-top: 0;
+            border-radius: 0;
+        }
+        .tab button:hover {
+            background-color: #f5d5f5;
+        }
+        .tab button.active {
+            background-color: #c20cc2;
+            color: white;
+        }
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #e270e2;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            animation: fadeEffect 1s;
+        }
+        .code-block {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            border: 1px solid #e270e2;
+        }
+        @keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #9c0a9c;
+            font-size: 14px;
+            border-top: 2px solid #e83ae8;
+            padding-top: 20px;
+        }
+        a {
+            color: #c20cc2;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Selenium WebElement & Dropdown Practice Page</h1>
+    
+    <div class="main-tabs">
+        <button class="main-tablinks active" onclick="openMainTab(event, 'WebElementTab')">WebElement Methods</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'DropdownTab')">Dropdown Methods</button>
+    </div>
+
+    <!-- WebElement Tab Content -->
+    <div id="WebElementTab" class="main-tabcontent" style="display: block;">
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'basicInteractions')">Basic Interactions</button>
+            <button class="tablinks" onclick="openTab(event, 'propertyMethods')">Property Methods</button>
+            <button class="tablinks" onclick="openTab(event, 'stateMethods')">State Methods</button>
+            <button class="tablinks" onclick="openTab(event, 'advancedMethods')">Advanced Methods</button>
+        </div>
+
+        <!-- Basic Interactions Tab -->
+        <div id="basicInteractions" class="tabcontent" style="display: block;">
+            <h2>Basic Interaction Methods</h2>
+            
+            <div class="method-section">
+                <h3>sendKeys() Method</h3>
+                <div class="method-info">
+                    <code>void sendKeys(CharSequence... keysToSend)</code> - Simulates typing into the element.
+                </div>
+                <div class="form-group">
+                    <label for="textInput">Enter Your Name:</label>
+                    <input type="text" id="textInput" placeholder="Type your name here">
+                    <p class="hint">Use driver.findElement(By.id("textInput")).sendKeys("Your name")</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>clear() Method</h3>
+                <div class="method-info">
+                    <code>void clear()</code> - Clears the content of a text field or textarea.
+                </div>
+                <div class="form-group">
+                    <label for="clearInput">Clear This Text:</label>
+                    <input type="text" id="clearInput" value="Text to be cleared">
+                    <p class="hint">Use driver.findElement(By.id("clearInput")).clear()</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>click() Method</h3>
+                <div class="method-info">
+                    <code>void click()</code> - Clicks the element.
+                </div>
+                <div class="form-group">
+                    <label for="clickButton">Click This Button:</label>
+                    <button id="clickButton" onclick="document.getElementById('clickResult').textContent = 'Button was clicked at ' + new Date().toLocaleTimeString()">Click Me</button>
+                    <div id="clickResult" class="result"></div>
+                    <p class="hint">Use driver.findElement(By.id("clickButton")).click()</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>submit() Method</h3>
+                <div class="method-info">
+                    <code>void submit()</code> - Submits a form.
+                </div>
+                <div class="form-group">
+                    <form id="sampleForm" onsubmit="event.preventDefault(); document.getElementById('submitResult').textContent = 'Form was submitted at ' + new Date().toLocaleTimeString()">
+                        <label for="formInput">Sample Form Input:</label>
+                        <input type="text" id="formInput" placeholder="Enter something">
+                        <button type="submit" id="submitButton">Submit Form</button>
+                    </form>
+                    <div id="submitResult" class="result"></div>
+                    <p class="hint">Use driver.findElement(By.id("formInput")).submit()</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Property Methods Tab -->
+        <div id="propertyMethods" class="tabcontent">
+            <h2>Property Retrieval Methods</h2>
+            
+            <div class="method-section">
+                <h3>getText() Method</h3>
+                <div class="method-info">
+                    <code>String getText()</code> - Gets the visible text of this element.
+                </div>
+                <div class="form-group">
+                    <label>Text to retrieve:</label>
+                    <p id="textElement">This is sample text you can retrieve with getText()</p>
+                    <p class="hint">Use driver.findElement(By.id("textElement")).getText()</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>getAttribute() Method</h3>
+                <div class="method-info">
+                    <code>String getAttribute(String name)</code> - Gets the value of the specified attribute.
+                </div>
+                <div class="form-group">
+                    <label for="attributeInput">Input with custom attributes:</label>
+                    <input type="text" id="attributeInput" data-testid="attribute-test" placeholder="This input has attributes" value="Attribute value">
+                    <p class="hint">Use driver.findElement(By.id("attributeInput")).getAttribute("value") or getAttribute("data-testid")</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>getCssValue() Method</h3>
+                <div class="method-info">
+                    <code>String getCssValue(String propertyName)</code> - Gets the value of a CSS property.
+                </div>
+                <div class="form-group">
+                    <label>Element with CSS properties:</label>
+                    <div id="cssElement" style="background-color: #faeaff; padding: 10px; border: 2px solid #c20cc2; color: #9c0a9c; border-radius: 5px;">
+                        This element has custom CSS styling
+                    </div>
+                    <p class="hint">Use driver.findElement(By.id("cssElement")).getCssValue("background-color")</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>getTagName() Method</h3>
+                <div class="method-info">
+                    <code>String getTagName()</code> - Gets the tag name of this element.
+                </div>
+                <div class="form-group">
+                    <label>Various HTML elements:</label>
+                    <div id="divElement">This is a div element</div>
+                    <span id="spanElement">This is a span element</span>
+                    <button id="buttonElement">This is a button element</button>
+                    <p class="hint">Use driver.findElement(By.id("divElement")).getTagName()</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- State Methods Tab -->
+        <div id="stateMethods" class="tabcontent">
+            <h2>Element State Methods</h2>
+            
+            <div class="method-section">
+                <h3>isDisplayed() Method</h3>
+                <div class="method-info">
+                    <code>boolean isDisplayed()</code> - Determines if an element is currently displayed.
+                </div>
+                <div class="form-group">
+                    <label>Visibility demonstration:</label>
+                    <div id="visibleElement">This element is visible</div>
+                    <div id="hiddenElement" style="display: none;">This element is hidden</div>
+                    <button onclick="toggleVisibility()">Toggle Visibility</button>
+                    <p class="hint">Use driver.findElement(By.id("visibleElement")).isDisplayed()</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>isEnabled() Method</h3>
+                <div class="method-info">
+                    <code>boolean isEnabled()</code> - Determines if an element is currently enabled.
+                </div>
+                <div class="form-group">
+                    <label for="enabledInput">Enabled input:</label>
+                    <input type="text" id="enabledInput" placeholder="This input is enabled">
+                    <label for="disabledInput">Disabled input:</label>
+                    <input type="text" id="disabledInput" placeholder="This input is disabled" disabled>
+                    <button onclick="toggleEnabled()">Toggle Enabled State</button>
+                    <p class="hint">Use driver.findElement(By.id("disabledInput")).isEnabled()</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>isSelected() Method</h3>
+                <div class="method-info">
+                    <code>boolean isSelected()</code> - Determines if a checkbox, radio button or option is selected.
+                </div>
+                <div class="form-group">
+                    <label>Checkboxes:</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="checkbox1" name="checkbox1">
+                        <label for="checkbox1">Option 1</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="checkbox2" name="checkbox2" checked>
+                        <label for="checkbox2">Option 2 (pre-selected)</label>
+                    </div>
+                    
+                    <label>Radio buttons:</label>
+                    <div class="checkbox-group">
+                        <input type="radio" id="radio1" name="radioGroup" value="option1">
+                        <label for="radio1">Radio 1</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="radio" id="radio2" name="radioGroup" value="option2" checked>
+                        <label for="radio2">Radio 2 (pre-selected)</label>
+                    </div>
+                    <p class="hint">Use driver.findElement(By.id("checkbox2")).isSelected()</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Methods Tab -->
+        <div id="advancedMethods" class="tabcontent">
+            <h2>Advanced Methods</h2>
+            
+            <div class="method-section">
+                <h3>getLocation() & getSize() Methods</h3>
+                <div class="method-info">
+                    <code>Point getLocation()</code> - Gets the location of the element.<br>
+                    <code>Dimension getSize()</code> - Gets the size of the element.
+                </div>
+                <div class="form-group">
+                    <label>Element for location/size:</label>
+                    <div id="locationElement" style="background-color: #faeaff; width: 200px; height: 100px; margin: 20px; padding: 10px; border: 1px solid #e270e2;">
+                        This element has specific size and location
+                    </div>
+                    <button onclick="showLocationAndSize()">Show Location & Size</button>
+                    <div id="locationResult" class="result"></div>
+                    <p class="hint">Use driver.findElement(By.id("locationElement")).getLocation() and getSize()</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>findElement() & findElements() Methods</h3>
+                <div class="method-info">
+                    <code>WebElement findElement(By by)</code> - Finds an element within this element.<br>
+                    <code>List&lt;WebElement&gt; findElements(By by)</code> - Finds all elements within this element.
+                </div>
+                <div class="form-group">
+                    <label>Parent element with child elements:</label>
+                    <div id="parentElement" style="border: 1px solid #e270e2; padding: 10px; background-color: #faeaff;">
+                        <p class="child-element">First child paragraph</p>
+                        <p class="child-element">Second child paragraph</p>
+                        <div class="child-element">Child div element</div>
+                        <span class="child-element">Child span element</span>
+                    </div>
+                    <p class="hint">Use driver.findElement(By.id("parentElement")).findElements(By.className("child-element"))</p>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>getRect() Method</h3>
+                <div class="method-info">
+                    <code>Rectangle getRect()</code> - Gets the location and size in a single Rectangle object.
+                </div>
+                <div class="form-group">
+                    <label>Element for rect method:</label>
+                    <div id="rectElement" style="background-color: #faeaff; width: 150px; height: 80px; margin: 15px; padding: 10px; border: 1px solid #c20cc2;">
+                        Use getRect() on this element
+                    </div>
+                    <button onclick="showRect()">Show Rectangle</button>
+                    <div id="rectResult" class="result"></div>
+                    <p class="hint">Use driver.findElement(By.id("rectElement")).getRect()</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dropdown Tab Content -->
+    <div id="DropdownTab" class="main-tabcontent">
+        <h2>Dropdown Methods Practice</h2>
+        
+        <div class="dropdown-section">
+            <h3>1. Select by Visible Text</h3>
+            <div class="method-info">
+                <p>Use <code>Select select = new Select(element);</code> then <code>select.selectByVisibleText("text");</code></p>
+            </div>
+            <div class="form-group">
+                <label for="fruits">Select your favorite fruit:</label>
+                <select id="fruits" name="fruits">
+                    <option value="">Select a fruit</option>
+                    <option value="apple">Apple</option>
+                    <option value="banana">Banana</option>
+                    <option value="orange">Orange</option>
+                    <option value="grape">Grape</option>
+                    <option value="mango">Mango</option>
+                </select>
+                <div class="hint">Example Java code:</div>
+                <div class="code-block">
+                    WebElement fruitDropdown = driver.findElement(By.id("fruits"));<br>
+                    Select select = new Select(fruitDropdown);<br>
+                    select.selectByVisibleText("Banana");
+                </div>
+                <div id="fruitsResult" class="result"></div>
+            </div>
+        </div>
+        
+        <div class="dropdown-section">
+            <h3>2. Select by Value</h3>
+            <div class="method-info">
+                <p>Use <code>Select select = new Select(element);</code> then <code>select.selectByValue("value");</code></p>
+            </div>
+            <div class="form-group">
+                <label for="superhero">Select a superhero:</label>
+                <select id="superhero" name="superhero">
+                    <option value="">Select a superhero</option>
+                    <option value="batman">Batman</option>
+                    <option value="superman">Superman</option>
+                    <option value="spiderman">Spider-Man</option>
+                    <option value="ironman">Iron Man</option>
+                    <option value="wonderwoman">Wonder Woman</option>
+                </select>
+                <div class="hint">Example Java code:</div>
+                <div class="code-block">
+                    WebElement heroDropdown = driver.findElement(By.id("superhero"));<br>
+                    Select select = new Select(heroDropdown);<br>
+                    select.selectByValue("spiderman");
+                </div>
+                <div id="superheroResult" class="result"></div>
+            </div>
+        </div>
+        
+        <div class="dropdown-section">
+            <h3>3. Select by Index</h3>
+            <div class="method-info">
+                <p>Use <code>Select select = new Select(element);</code> then <code>select.selectByIndex(2);</code></p>
+            </div>
+            <div class="form-group">
+                <label for="languages">Select a programming language:</label>
+                <select id="languages" name="languages">
+                    <option value="">Select a language</option>
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="csharp">C#</option>
+                    <option value="ruby">Ruby</option>
+                </select>
+                <div class="hint">Example Java code:</div>
+                <div class="code-block">
+                    WebElement langDropdown = driver.findElement(By.id("languages"));<br>
+                    Select select = new Select(langDropdown);<br>
+                    select.selectByIndex(2); // Selects Python (index 0 is the placeholder)
+                </div>
+                <div id="languagesResult" class="result"></div>
+            </div>
+        </div>
+        
+        <div class="dropdown-section">
+            <h3>4. Multi-Select Dropdown</h3>
+            <div class="method-info">
+                <p>Use <code>Select select = new Select(element);</code> followed by multiple selection methods</p>
+            </div>
+            <div class="form-group">
+                <label for="skills">Select your programming skills (hold Ctrl/Cmd to select multiple):</label>
+                <select id="skills" name="skills" multiple>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                    <option value="csharp">C#</option>
+                    <option value="php">PHP</option>
+                    <option value="ruby">Ruby</option>
+                </select>
+                <div class="hint">Example Java code:</div>
+                <div class="code-block">
+                    WebElement skillsDropdown = driver.findElement(By.id("skills"));<br>
+                    Select select = new Select(skillsDropdown);<br>
+                    select.selectByValue("html");<br>
+                    select.selectByValue("css");<br>
+                    select.selectByValue("javascript");
+                </div>
+                <button onclick="showSelectedSkills()">Show Selected Skills</button>
+                <div id="skillsResult" class="result"></div>
+            </div>
+        </div>
+        
+        <div class="dropdown-section">
+            <h3>5. Working with All Options</h3>
+            <div class="method-info">
+                <p>Use <code>select.getOptions()</code> to get all options, or <code>select.getAllSelectedOptions()</code> for selected options</p>
+            </div>
+            <div class="form-group">
+                <label for="countries">Select a country:</label>
+                <select id="countries" name="countries">
+                    <option value="">Select a country</option>
+                    <option value="us">United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="au">Australia</option>
+                    <option value="in">India</option>
+                    <option value="jp">Japan</option>
+                    <option value="br">Brazil</option>
+                    <option value="za">South Africa</option>
+                </select>
+                <div class="hint">Example Java code:</div>
+                <div class="code-block">
+                    WebElement countriesDropdown = driver.findElement(By.id("countries"));<br>
+                    Select select = new Select(countriesDropdown);<br>
+                    List&lt;WebElement&gt; options = select.getOptions();<br>
+                    for (WebElement option : options) {<br>
+                    &nbsp;&nbsp;System.out.println(option.getText());<br>
+                    }
+                </div>
+                <button onclick="listAllOptions()">List All Countries</button>
+                <div id="countriesResult" class="result"></div>
+            </div>
+        </div>
+        
+        <div class="dropdown-section">
+            <h3>6. Get Selected Option</h3>
+            <div class="method-info">
+                <p>Use <code>select.getFirstSelectedOption()</code> to get the selected option</p>
+            </div>
+            <div class="form-group">
+                <label for="colors">Select your favorite color:</label>
+                <select id="colors" name="colors">
+                    <option value="">Select a color</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="purple">Purple</option>
+                    <option value="orange">Orange</option>
+                </select>
+                <div class="hint">Example Java code:</div>
+                <div class="code-block">
+                    WebElement colorsDropdown = driver.findElement(By.id("colors"));<br>
+                    Select select = new Select(colorsDropdown);<br>
+                    select.selectByVisibleText("Blue");<br>
+                    WebElement selectedOption = select.getFirstSelectedOption();<br>
+                    System.out.println("Selected color: " + selectedOption.getText());
+                </div>
+                <button onclick="showSelectedColor()">Show Selected Color</button>
+                <div id="colorsResult" class="result"></div>
+            </div>
+        </div>
+        
+        <div class="dropdown-section">
+            <h3>7. Check if Multi-Select</h3>
+            <div class="method-info">
+                <p>Use <code>select.isMultiple()</code> to check if dropdown allows multiple selections</p>
+            </div>
+            <div class="form-group">
+                <label for="singleSelect">Single select dropdown:</label>
+                <select id="singleSelect" name="singleSelect">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                </select>
+                
+                <label for="multiSelect" style="margin-top: 15px;">Multi-select dropdown:</label>
+                <select id="multiSelect" name="multiSelect" multiple>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                </select>
+                
+                <div class="hint">Example Java code:</div>
+                <div class="code-block">
+                    WebElement singleDropdown = driver.findElement(By.id("singleSelect"));<br>
+                    Select singleSelect = new Select(singleDropdown);<br>
+                    System.out.println("Is single-select multiple? " + singleSelect.isMultiple());<br><br>
+                    
+                    WebElement multiDropdown = driver.findElement(By.id("multiSelect"));<br>
+                    Select multiSelect = new Select(multiDropdown);<br>
+                    System.out.println("Is multi-select multiple? " + multiSelect.isMultiple());
+                </div>
+                <button onclick="checkMultiple()">Check Multiple Status</button>
+                <div id="multipleResult" class="result"></div>
+            </div>
+        </div>
+        
+        <div class="dropdown-section">
+            <h3>8. Deselect Options</h3>
+            <div class="method-info">
+                <p>Use <code>select.deselectByValue()</code>, <code>select.deselectByVisibleText()</code>, <code>select.deselectByIndex(
