@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selenium Locator Practice Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #fef4ff;
+        }
+        h1, h2, h3 {
+            color: #9c0a9c;
+            border-bottom: 2px solid #e83ae8;
+            padding-bottom: 8px;
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e270e2;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 3px 6px rgba(156, 10, 156, 0.1);
+        }
+        .highlight-section {
+            background-color: #faeaff;
+            border-color: #d359d3;
+        }
+        .element-description {
+            font-size: 0.9em;
+            color: #9c0a9c;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 2px solid #e270e2;
+        }
+        th, td {
+            border: 1px solid #e270e2;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #faeaff;
+            color: #9c0a9c;
+        }
+        button {
+            margin: 10px 0;
+            padding: 8px 15px;
+            background-color: #c20cc2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #9c0a9c;
+        }
+        input, select, textarea {
+            margin: 10px 0;
+            padding: 8px;
+            border: 1px solid #e270e2;
+            border-radius: 4px;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #9c0a9c;
+            box-shadow: 0 0 5px rgba(156, 10, 156, 0.3);
+        }
+        .form-group {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e270e2;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #9c0a9c;
+            font-weight: bold;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .box {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            border: 1px solid #e270e2;
+            border-radius: 8px;
+            background-color: #faeaff;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #9c0a9c;
+            padding: 10px;
+            border-top: 2px solid #e83ae8;
+        }
+        a {
+            color: #c20cc2;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="page-title">Selenium Locator Strategies Practice Page</h1>
+        <p class="element-description">This page contains elements to practice all locator strategies from Selenium's FindBy annotation</p>
+    </header>
+
+    <main>
+        <!-- Basic Locator Strategies Section -->
+        <section id="basic-locators" class="highlight-section">
+            <h2>Basic Locator Strategies</h2>
+            
+            <!-- ID Locator -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter username">
+                <p class="element-description">Element with ID attribute</p>
+            </div>
+            
+            <!-- Name Locator -->
+            <div class="form-group">
+                <label for="password-field">Password:</label>
+                <input type="password" id="password-field" name="password" placeholder="Enter password">
+                <p class="element-description">Element with Name attribute</p>
+            </div>
+            
+            <!-- Class Name Locator -->
+            <div class="form-group">
+                <label>Select your favorite color:</label>
+                <select class="dropdown-menu" name="favorite-color">
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                </select>
+                <p class="element-description">Element with Class attribute</p>
+            </div>
+            
+            <!-- Tag Name Locator -->
+            <div class="form-group">
+                <label>Comments:</label>
+                <textarea rows="3" cols="40" placeholder="Enter comments here"></textarea>
+                <p class="element-description">Element with specific HTML tag</p>
+            </div>
+            
+            <!-- Link Text Locator -->
+            <div class="form-group">
+                <a href="https://www.selenium.dev" id="selenium-link">Visit Selenium Official Website</a>
+                <p class="element-description">Link element with full text</p>
+            </div>
+            
+            <!-- Partial Link Text Locator -->
+            <div class="form-group">
+                <a href="https://github.com/SeleniumHQ/selenium" id="github-link">Selenium GitHub Repository</a>
+                <p class="element-description">Link element with partial text</p>
+            </div>
+        </section>
+        
+        <!-- CSS Selector Examples -->
+        <section id="css-selectors">
+            <h2>CSS Selector Examples</h2>
+            
+            <div class="form-group">
+                <button type="button" id="submit-btn" class="btn-primary">Submit Form</button>
+                <p class="element-description">Button with ID attribute</p>
+            </div>
+            
+            <div class="form-group">
+                <button type="button" class="btn-secondary action-button">Reset Form</button>
+                <p class="element-description">Button with specific class</p>
+            </div>
+            
+            <div class="form-group" id="checkbox-group">
+                <label>Hobbies:</label>
+                <div>
+                    <input type="checkbox" id="hobby-reading" name="hobby" value="reading">
+                    <label for="hobby-reading">Reading</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="hobby-sports" name="hobby" value="sports">
+                    <label for="hobby-sports">Sports</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="hobby-music" name="hobby" value="music">
+                    <label for="hobby-music">Music</label>
+                </div>
+                <p class="element-description">Elements with specific attribute values</p>
+            </div>
+            
+            <div class="form-group">
+                <p class="info-text">This is an informational paragraph.</p>
+                <p class="warning-text">This is a warning paragraph.</p>
+                <p class="error-text">This is an error paragraph.</p>
+                <p class="element-description">Elements in specific positions</p>
+            </div>
+        </section>
+        
+        <!-- XPath Examples -->
+        <section id="xpath-examples">
+            <h2>XPath Examples</h2>
+            
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" placeholder="Enter email">
+                <p class="element-description">Element that can be found by attribute path</p>
+            </div>
+            
+            <div class="form-group">
+                <div class="radio-group">
+                    <label>Gender:</label>
+                    <div>
+                        <input type="radio" id="gender-male" name="gender" value="male">
+                        <label for="gender-male">Male</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="gender-female" name="gender" value="female">
+                        <label for="gender-female">Female</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="gender-other" name="gender" value="other">
+                        <label for="gender-other">Other</label>
+                    </div>
+                </div>
+                <p class="element-description">Elements with multiple attributes</p>
+            </div>
+            
+            <div class="form-group">
+                <div class="container">
+                    <div class="box">
+                        <p>Box 1 Content</p>
+                        <button type="button" class="box-button">Click Box 1</button>
+                    </div>
+                    <div class="box">
+                        <p>Box 2 Content</p>
+                        <button type="button" class="box-button">Click Box 2</button>
+                    </div>
+                </div>
+                <p class="element-description">Elements in specific positions within parent containers</p>
+            </div>
+            
+            <div class="form-group">
+                <h3>Product List</h3>
+                <ul id="product-list">
+                    <li class="product" data-product-id="1">Product A</li>
+                    <li class="product" data-product-id="2">Product B</li>
+                    <li class="product" data-product-id="3">Product C</li>
+                </ul>
+                <p class="element-description">Elements with partial attribute values</p>
+            </div>
+        </section>
+        
+        <!-- Advanced Locator Challenges -->
+        <section id="advanced-locators" class="highlight-section">
+            <h2>Advanced Locator Challenges</h2>
+            
+            <div class="form-group">
+                <table id="user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-user-id="1001">
+                            <td>1001</td>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td><button class="edit-user">Edit</button></td>
+                        </tr>
+                        <tr data-user-id="1002">
+                            <td>1002</td>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td><button class="edit-user">Edit</button></td>
+                        </tr>
+                        <tr data-user-id="1003">
+                            <td>1003</td>
+                            <td>Bob Johnson</td>
+                            <td>bob@example.com</td>
+                            <td><button class="edit-user">Edit</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="element-description">Challenge: Find the Edit button for Jane Smith</p>
+            </div>
+            
+            <div class="form-group">
+                <div id="nested-divs">
+                    <div class="level-1">
+                        <p>Level 1</p>
+                        <div class="level-2">
+                            <p>Level 2</p>
+                            <div class="level-3">
+                                <p>Level 3</p>
+                                <div class="level-4">
+                                    <p>Level 4</p>
+                                    <button id="deep-button" class="hidden-button">Hidden Button</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="element-description">Challenge: Find the deeply nested hidden button</p>
+            </div>
+            
+            <div class="form-group">
+                <div id="dynamically-generated">
+                    <div class="dynamic-row" id="row-1">
+                        <span class="row-label">Row 1:</span>
+                        <input type="text" class="dynamic-input" placeholder="Dynamic input 1">
+                        <button type="button" class="dynamic-action">Action</button>
+                    </div>
+                    <div class="dynamic-row" id="row-2">
+                        <span class="row-label">Row 2:</span>
+                        <input type="text" class="dynamic-input" placeholder="Dynamic input 2">
+                        <button type="button" class="dynamic-action">Action</button>
+                    </div>
+                    <div class="dynamic-row" id="row-3">
+                        <span class="row-label">Row 3:</span>
+                        <input type="text" class="dynamic-input" placeholder="Dynamic input 3">
+                        <button type="button" class="dynamic-action">Action</button>
+                    </div>
+                </div>
+                <p class="element-description">Challenge: Find the action button for the second row</p>
+            </div>
+        </section>
+        
+        <!-- Special Attribute Examples -->
+        <section id="special-attributes">
+            <h2>Special Attribute Examples</h2>
+            
+            <div class="form-group">
+                <label for="search-input">Search:</label>
+                <input type="text" id="search-input" placeholder="Search here..." data-testid="search-field">
+                <button type="button" id="search-button" data-testid="search-button">Search</button>
+                <p class="element-description">Elements with custom data attributes</p>
+            </div>
+            
+            <div class="form-group">
+                <div aria-label="Notification panel" class="notification-panel">
+                    <p>You have 3 unread messages</p>
+                    <button aria-label="Close notification">X</button>
+                </div>
+                <p class="element-description">Elements with accessibility attributes</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="country-select">Country:</label>
+                <select id="country-select" name="country">
+                    <option value="">Select a country</option>
+                    <option value="us">United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="au">Australia</option>
+                </select>
+                <p class="element-description">Finding options by displayed text</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created for Selenium with Java Course - Practice Page for FindBy Locator Strategies</p>
+    </footer>
+
+    <script>
+        // You can add JavaScript here if needed for more advanced behaviors
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            alert('Form submitted!');
+        });
+    </script>
+</body>
+</html>
