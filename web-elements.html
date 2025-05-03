@@ -537,7 +537,8 @@
             <h3>1. Select by Visible Text</h3>
             <div class="method-info">
                 <p>Use <code>Select select = new Select(element);</code> then
-                    <code>select.selectByVisibleText("text");</code></p>
+                    <code>select.selectByVisibleText("text");</code>
+                </p>
             </div>
             <div class="form-group">
                 <label for="fruits">Select your favorite fruit:</label>
@@ -563,7 +564,8 @@
             <h3>2. Select by Value</h3>
             <div class="method-info">
                 <p>Use <code>Select select = new Select(element);</code> then
-                    <code>select.selectByValue("value");</code></p>
+                    <code>select.selectByValue("value");</code>
+                </p>
             </div>
             <div class="form-group">
                 <label for="superhero">Select a superhero:</label>
@@ -644,7 +646,8 @@
             <h3>5. Working with All Options</h3>
             <div class="method-info">
                 <p>Use <code>select.getOptions()</code> to get all options, or
-                    <code>select.getAllSelectedOptions()</code> for selected options</p>
+                    <code>select.getAllSelectedOptions()</code> for selected options
+                </p>
             </div>
             <div class="form-group">
                 <label for="countries">Select a country:</label>
@@ -741,32 +744,36 @@
             <h3>8. Deselect Options</h3>
             <div class="method-info">
                 <p>Use <code>select.deselectByValue()</code>, <code>select.deselectByVisibleText()</code>,
-                    <code>select.deselectByIndex()</code>, or <code>select.deselectAll()</code></p>
+                    <code>select.deselectByIndex()</code>, or <code>select.deselectAll()</code>
+                </p>
             </div>
             <div class="form-group">
                 <label for="tools">Select testing tools (hold Ctrl/Cmd to select multiple):</label>
                 <select id="tools" name="tools" multiple>
                     <option value="selenium">Selenium</option>
                     <option value="cypress">Cypress</option>
-                    <option value="playwright">Playwright</option>
-                    <option value="appium">Appium</option>
-                    <option value="katalon">Katalon</option>
-                    <option value="postman">Postman</option>
-                </select>
-                <div class="hint">Example Java code:</div>
-                <div class="code-block">
-                    WebElement toolsDropdown = driver.findElement(By.id("tools"));<br>
-                    Select select = new Select(toolsDropdown);<br>
-                    select.selectByValue("selenium");<br>
-                    select.selectByValue("cypress");<br>
-                    select.selectByValue("playwright");<br>
-                    // Deselect one option<br>
-                    select.deselectByValue("cypress");<br>
-                    // Deselect all options<br>
-                    select.deselectAll();
-                </div>
-                <button onclick="toggleSelectDeselectTools()">Select/Deselect All Tools</button>
-                <div id="toolsResult" class="result"></div>
+                    <select id="tools" name="tools" multiple>
+                        <option value="selenium">Selenium</option>
+                        <option value="cypress">Cypress</option>
+                        <option value="playwright">Playwright</option>
+                        <option value="appium">Appium</option>
+                        <option value="katalon">Katalon</option>
+                        <option value="postman">Postman</option>
+                    </select>
+                    <div class="hint">Example Java code:</div>
+                    <div class="code-block">
+                        WebElement toolsDropdown = driver.findElement(By.id("tools"));<br>
+                        Select select = new Select(toolsDropdown);<br>
+                        select.selectByValue("selenium");<br>
+                        select.selectByValue("cypress");<br>
+                        select.selectByValue("playwright");<br>
+                        // Deselect one option<br>
+                        select.deselectByValue("cypress");<br>
+                        // Deselect all options<br>
+                        select.deselectAll();
+                    </div>
+                    <button onclick="toggleSelectDeselectTools()">Select/Deselect All Tools</button>
+                    <div id="toolsResult" class="result"></div>
             </div>
         </div>
     </div>
@@ -811,6 +818,93 @@
             // Show the selected tab and add the 'active' class to the clicked button
             document.getElementById(tabName).style.display = "block";
             event.currentTarget.classList.add("active");
+        }
+
+        // Fix for the missing functions that were causing the error
+        function toggleVisibility() {
+            const visibleElement = document.getElementById("visibleElement");
+            const hiddenElement = document.getElementById("hiddenElement");
+
+            if (visibleElement.style.display === "none") {
+                visibleElement.style.display = "block";
+                hiddenElement.style.display = "none";
+            } else {
+                visibleElement.style.display = "none";
+                hiddenElement.style.display = "block";
+            }
+        }
+
+        function toggleEnabled() {
+            const enabledInput = document.getElementById("enabledInput");
+            const disabledInput = document.getElementById("disabledInput");
+
+            if (enabledInput.disabled) {
+                enabledInput.disabled = false;
+                disabledInput.disabled = true;
+            } else {
+                enabledInput.disabled = true;
+                disabledInput.disabled = false;
+            }
+        }
+
+        function showLocationAndSize() {
+            const element = document.getElementById("locationElement");
+            const rect = element.getBoundingClientRect();
+
+            document.getElementById("locationResult").textContent =
+                `Location: X=${Math.round(rect.left)}, Y=${Math.round(rect.top)} | Size: Width=${Math.round(rect.width)}, Height=${Math.round(rect.height)}`;
+        }
+
+        function showRect() {
+            const element = document.getElementById("rectElement");
+            const rect = element.getBoundingClientRect();
+
+            document.getElementById("rectResult").textContent =
+                `Rectangle: X=${Math.round(rect.left)}, Y=${Math.round(rect.top)}, Width=${Math.round(rect.width)}, Height=${Math.round(rect.height)}`;
+        }
+
+        function showSelectedSkills() {
+            const select = document.getElementById("skills");
+            const selectedOptions = Array.from(select.selectedOptions).map(option => option.text);
+
+            document.getElementById("skillsResult").textContent =
+                selectedOptions.length > 0 ? `Selected skills: ${selectedOptions.join(", ")}` : "No skills selected";
+        }
+
+        function listAllOptions() {
+            const select = document.getElementById("countries");
+            const options = Array.from(select.options).map(option => option.text).filter(text => text !== "Select a country");
+
+            document.getElementById("countriesResult").textContent =
+                `Available countries: ${options.join(", ")}`;
+        }
+
+        function showSelectedColor() {
+            const select = document.getElementById("colors");
+            const selectedOption = select.options[select.selectedIndex];
+
+            document.getElementById("colorsResult").textContent =
+                selectedOption.value ? `Selected color: ${selectedOption.text}` : "No color selected";
+        }
+
+        function checkMultiple() {
+            const singleSelect = document.getElementById("singleSelect");
+            const multiSelect = document.getElementById("multiSelect");
+
+            document.getElementById("multipleResult").textContent =
+                `Single-select multiple? ${singleSelect.multiple} | Multi-select multiple? ${multiSelect.multiple}`;
+        }
+
+        function toggleSelectDeselectTools() {
+            const select = document.getElementById("tools");
+            const allSelected = Array.from(select.options).every(option => option.selected);
+
+            for (let option of select.options) {
+                option.selected = !allSelected;
+            }
+
+            document.getElementById("toolsResult").textContent =
+                allSelected ? "All tools deselected" : "All tools selected";
         }
     </script>
 </body>
