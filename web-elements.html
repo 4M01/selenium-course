@@ -296,7 +296,6 @@
                 <div class="form-group">
                     <label for="textInput">Enter Your Name:</label>
                     <input type="text" id="textInput" placeholder="Type your name here">
-                    <p class="hint">Use driver.findElement(By.id("textInput")).sendKeys("Your name")</p>
                 </div>
             </div>
 
@@ -308,7 +307,6 @@
                 <div class="form-group">
                     <label for="clearInput">Clear This Text:</label>
                     <input type="text" id="clearInput" value="Text to be cleared">
-                    <p class="hint">Use driver.findElement(By.id("clearInput")).clear()</p>
                 </div>
             </div>
 
@@ -323,7 +321,6 @@
                         onclick="document.getElementById('clickResult').textContent = 'Button was clicked at ' + new Date().toLocaleTimeString()">Click
                         Me</button>
                     <div id="clickResult" class="result"></div>
-                    <p class="hint">Use driver.findElement(By.id("clickButton")).click()</p>
                 </div>
             </div>
 
@@ -340,7 +337,6 @@
                         <button type="submit" id="submitButton">Submit Form</button>
                     </form>
                     <div id="submitResult" class="result"></div>
-                    <p class="hint">Use driver.findElement(By.id("formInput")).submit()</p>
                 </div>
             </div>
         </div>
@@ -357,7 +353,6 @@
                 <div class="form-group">
                     <label>Text to retrieve:</label>
                     <p id="textElement">This is sample text you can retrieve with getText()</p>
-                    <p class="hint">Use driver.findElement(By.id("textElement")).getText()</p>
                 </div>
             </div>
 
@@ -370,8 +365,7 @@
                     <label for="attributeInput">Input with custom attributes:</label>
                     <input type="text" id="attributeInput" data-testid="attribute-test"
                         placeholder="This input has attributes" value="Attribute value">
-                    <p class="hint">Use driver.findElement(By.id("attributeInput")).getAttribute("value") or
-                        getAttribute("data-testid")</p>
+
                 </div>
             </div>
 
@@ -386,7 +380,6 @@
                         style="background-color: #faeaff; padding: 10px; border: 2px solid #c20cc2; color: #9c0a9c; border-radius: 5px;">
                         This element has custom CSS styling
                     </div>
-                    <p class="hint">Use driver.findElement(By.id("cssElement")).getCssValue("background-color")</p>
                 </div>
             </div>
 
@@ -400,7 +393,6 @@
                     <div id="divElement">This is a div element</div>
                     <span id="spanElement">This is a span element</span>
                     <button id="buttonElement">This is a button element</button>
-                    <p class="hint">Use driver.findElement(By.id("divElement")).getTagName()</p>
                 </div>
             </div>
         </div>
@@ -419,7 +411,6 @@
                     <div id="visibleElement">This element is visible</div>
                     <div id="hiddenElement" style="display: none;">This element is hidden</div>
                     <button onclick="toggleVisibility()">Toggle Visibility</button>
-                    <p class="hint">Use driver.findElement(By.id("visibleElement")).isDisplayed()</p>
                 </div>
             </div>
 
@@ -434,7 +425,6 @@
                     <label for="disabledInput">Disabled input:</label>
                     <input type="text" id="disabledInput" placeholder="This input is disabled" disabled>
                     <button onclick="toggleEnabled()">Toggle Enabled State</button>
-                    <p class="hint">Use driver.findElement(By.id("disabledInput")).isEnabled()</p>
                 </div>
             </div>
 
@@ -463,7 +453,6 @@
                         <input type="radio" id="radio2" name="radioGroup" value="option2" checked>
                         <label for="radio2">Radio 2 (pre-selected)</label>
                     </div>
-                    <p class="hint">Use driver.findElement(By.id("checkbox2")).isSelected()</p>
                 </div>
             </div>
         </div>
@@ -486,7 +475,6 @@
                     </div>
                     <button onclick="showLocationAndSize()">Show Location & Size</button>
                     <div id="locationResult" class="result"></div>
-                    <p class="hint">Use driver.findElement(By.id("locationElement")).getLocation() and getSize()</p>
                 </div>
             </div>
 
@@ -505,8 +493,7 @@
                         <div class="child-element">Child div element</div>
                         <span class="child-element">Child span element</span>
                     </div>
-                    <p class="hint">Use
-                        driver.findElement(By.id("parentElement")).findElements(By.className("child-element"))</p>
+
                 </div>
             </div>
 
@@ -523,7 +510,7 @@
                     </div>
                     <button onclick="showRect()">Show Rectangle</button>
                     <div id="rectResult" class="result"></div>
-                    <p class="hint">Use driver.findElement(By.id("rectElement")).getRect()</p>
+
                 </div>
             </div>
         </div>
@@ -550,12 +537,7 @@
                     <option value="grape">Grape</option>
                     <option value="mango">Mango</option>
                 </select>
-                <div class="hint">Example Java code:</div>
-                <div class="code-block">
-                    WebElement fruitDropdown = driver.findElement(By.id("fruits"));<br>
-                    Select select = new Select(fruitDropdown);<br>
-                    select.selectByVisibleText("Banana");
-                </div>
+
                 <div id="fruitsResult" class="result"></div>
             </div>
         </div>
@@ -577,12 +559,7 @@
                     <option value="ironman">Iron Man</option>
                     <option value="wonderwoman">Wonder Woman</option>
                 </select>
-                <div class="hint">Example Java code:</div>
-                <div class="code-block">
-                    WebElement heroDropdown = driver.findElement(By.id("superhero"));<br>
-                    Select select = new Select(heroDropdown);<br>
-                    select.selectByValue("spiderman");
-                </div>
+
                 <div id="superheroResult" class="result"></div>
             </div>
         </div>
@@ -602,12 +579,7 @@
                     <option value="csharp">C#</option>
                     <option value="ruby">Ruby</option>
                 </select>
-                <div class="hint">Example Java code:</div>
-                <div class="code-block">
-                    WebElement langDropdown = driver.findElement(By.id("languages"));<br>
-                    Select select = new Select(langDropdown);<br>
-                    select.selectByIndex(2); // Selects Python (index 0 is the placeholder)
-                </div>
+
                 <div id="languagesResult" class="result"></div>
             </div>
         </div>
@@ -629,14 +601,7 @@
                     <option value="php">PHP</option>
                     <option value="ruby">Ruby</option>
                 </select>
-                <div class="hint">Example Java code:</div>
-                <div class="code-block">
-                    WebElement skillsDropdown = driver.findElement(By.id("skills"));<br>
-                    Select select = new Select(skillsDropdown);<br>
-                    select.selectByValue("html");<br>
-                    select.selectByValue("css");<br>
-                    select.selectByValue("javascript");
-                </div>
+
                 <button onclick="showSelectedSkills()">Show Selected Skills</button>
                 <div id="skillsResult" class="result"></div>
             </div>
@@ -662,15 +627,7 @@
                     <option value="br">Brazil</option>
                     <option value="za">South Africa</option>
                 </select>
-                <div class="hint">Example Java code:</div>
-                <div class="code-block">
-                    WebElement countriesDropdown = driver.findElement(By.id("countries"));<br>
-                    Select select = new Select(countriesDropdown);<br>
-                    List&lt;WebElement&gt; options = select.getOptions();<br>
-                    for (WebElement option : options) {<br>
-                    &nbsp;&nbsp;System.out.println(option.getText());<br>
-                    }
-                </div>
+
                 <button onclick="listAllOptions()">List All Countries</button>
                 <div id="countriesResult" class="result"></div>
             </div>
@@ -692,14 +649,7 @@
                     <option value="purple">Purple</option>
                     <option value="orange">Orange</option>
                 </select>
-                <div class="hint">Example Java code:</div>
-                <div class="code-block">
-                    WebElement colorsDropdown = driver.findElement(By.id("colors"));<br>
-                    Select select = new Select(colorsDropdown);<br>
-                    select.selectByVisibleText("Blue");<br>
-                    WebElement selectedOption = select.getFirstSelectedOption();<br>
-                    System.out.println("Selected color: " + selectedOption.getText());
-                </div>
+
                 <button onclick="showSelectedColor()">Show Selected Color</button>
                 <div id="colorsResult" class="result"></div>
             </div>
@@ -725,16 +675,7 @@
                     <option value="option3">Option 3</option>
                 </select>
 
-                <div class="hint">Example Java code:</div>
-                <div class="code-block">
-                    WebElement singleDropdown = driver.findElement(By.id("singleSelect"));<br>
-                    Select singleSelect = new Select(singleDropdown);<br>
-                    System.out.println("Is single-select multiple? " + singleSelect.isMultiple());<br><br>
 
-                    WebElement multiDropdown = driver.findElement(By.id("multiSelect"));<br>
-                    Select multiSelect = new Select(multiDropdown);<br>
-                    System.out.println("Is multi-select multiple? " + multiSelect.isMultiple());
-                </div>
                 <button onclick="checkMultiple()">Check Multiple Status</button>
                 <div id="multipleResult" class="result"></div>
             </div>
@@ -760,18 +701,7 @@
                         <option value="katalon">Katalon</option>
                         <option value="postman">Postman</option>
                     </select>
-                    <div class="hint">Example Java code:</div>
-                    <div class="code-block">
-                        WebElement toolsDropdown = driver.findElement(By.id("tools"));<br>
-                        Select select = new Select(toolsDropdown);<br>
-                        select.selectByValue("selenium");<br>
-                        select.selectByValue("cypress");<br>
-                        select.selectByValue("playwright");<br>
-                        // Deselect one option<br>
-                        select.deselectByValue("cypress");<br>
-                        // Deselect all options<br>
-                        select.deselectAll();
-                    </div>
+
                     <button onclick="toggleSelectDeselectTools()">Select/Deselect All Tools</button>
                     <div id="toolsResult" class="result"></div>
             </div>
