@@ -285,7 +285,7 @@
         </div>
 
         <!-- Basic Interactions Tab -->
-        <div id="basicInteractions" class="tabcontent" style="display: none;">
+        <div id="basicInteractions" class="tabcontent" style="display: block;">
             <h2>Basic Interaction Methods</h2>
 
             <div class="method-section">
@@ -342,8 +342,9 @@
         </div>
 
         <!-- Property Methods Tab -->
-        <div id="propertyMethods" class="tabcontent" style="display: block;">
+        <div id="propertyMethods" class="tabcontent">
             <h2>Property Retrieval Methods</h2>
+
             <div class="method-section">
                 <h3>getText() Method</h3>
                 <div class="method-info">
@@ -354,6 +355,46 @@
                     <span id="textElement">
                         <p id="textElem">This is sample text you can retrieve with getText()</p>
                     </span>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>getAttribute() Method</h3>
+                <div class="method-info">
+                    <code>String getAttribute(String name)</code> - Gets the value of the specified attribute.
+                </div>
+                <div class="form-group">
+                    <label for="attributeInput">Input with custom attributes:</label>
+                    <input type="text" id="attributeInput" data-testid="attribute-test"
+                        placeholder="This input has attributes" value="Attribute value">
+
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>getCssValue() Method</h3>
+                <div class="method-info">
+                    <code>String getCssValue(String propertyName)</code> - Gets the value of a CSS property.
+                </div>
+                <div class="form-group">
+                    <label>Element with CSS properties:</label>
+                    <div id="cssElement"
+                        style="background-color: #faeaff; padding: 10px; border: 2px solid #c20cc2; color: #9c0a9c; border-radius: 5px;">
+                        This element has custom CSS styling
+                    </div>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3>getTagName() Method</h3>
+                <div class="method-info">
+                    <code>String getTagName()</code> - Gets the tag name of this element.
+                </div>
+                <div class="form-group">
+                    <label>Various HTML elements:</label>
+                    <div id="divElement">This is a div element</div>
+                    <span id="spanElement">This is a span element</span>
+                    <button id="buttonElement">This is a button element</button>
                 </div>
             </div>
         </div>
