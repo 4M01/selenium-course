@@ -714,6 +714,29 @@
         <p>Created for educational purposes. <a href="https://www.selenium.dev/">Selenium Documentation</a></p>
     </footer>
     <script>
+
+        // For the fruits dropdown (field 1)
+        document.getElementById('fruits').addEventListener('change', function () {
+            const selectedText = this.options[this.selectedIndex].text;
+            document.getElementById('fruitsResult').textContent =
+                'Selected fruit: ' + selectedText;
+        });
+
+        // For the superhero dropdown (field 2)
+        document.getElementById('superhero').addEventListener('change', function () {
+            const selectedText = this.options[this.selectedIndex].text;
+            const selectedValue = this.value;
+            document.getElementById('superheroResult').textContent =
+                'Selected: ' + selectedText + ' (value: ' + selectedValue + ')';
+        });
+
+        // For the languages dropdown (field 3)
+        document.getElementById('languages').addEventListener('change', function () {
+            const selectedText = this.options[this.selectedIndex].text;
+            const selectedIndex = this.selectedIndex;
+            document.getElementById('languagesResult').textContent =
+                'Selected: ' + selectedText + ' at index ' + selectedIndex;
+        });
         // Function to handle switching between main tabs
         function openMainTab(event, tabName) {
             // Hide all main tab content
