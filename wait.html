@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selenium Practice - Synchronization & Wait Strategies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #fef4ff;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #9c0a9c;
+            border-bottom: 2px solid #e83ae8;
+            padding-bottom: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .method-section,
+        .dropdown-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e270e2;
+            box-shadow: 0 3px 6px rgba(156, 10, 156, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #9c0a9c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e270e2;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #9c0a9c;
+            box-shadow: 0 0 5px rgba(156, 10, 156, 0.3);
+        }
+
+        input[disabled] {
+            background-color: #f8e8fc;
+            cursor: not-allowed;
+        }
+
+        select[multiple] {
+            height: 120px;
+        }
+
+        button {
+            background-color: #c20cc2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #9c0a9c;
+        }
+
+        .checkbox-group {
+            margin: 10px 0;
+        }
+
+        .result {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            min-height: 20px;
+            border: 1px solid #e270e2;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .hint {
+            font-style: italic;
+            color: #9c0a9c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .method-info {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            border: 1px dashed #e270e2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border: 2px solid #e270e2;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #e270e2;
+        }
+
+        th {
+            background-color: #faeaff;
+            color: #9c0a9c;
+        }
+
+        .main-tabs {
+            display: flex;
+            overflow: hidden;
+            border: 1px solid #e270e2;
+            background-color: #faeaff;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .main-tabs button {
+            flex: 1;
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            margin-top: 0;
+            border-radius: 0;
+            color: #9c0a9c;
+        }
+
+        .main-tabs button:hover {
+            background-color: #f5d5f5;
+        }
+
+        .main-tabs button.active {
+            background-color: #c20cc2;
+            color: white;
+        }
+
+        .main-tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #e270e2;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            animation: fadeEffect 1s;
+        }
+
+        .tab {
+            overflow: hidden;
+            border: 1px solid #e270e2;
+            background-color: #faeaff;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+        }
+
+        .tab button {
+            flex: 1;
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px 16px;
+            transition: 0.3s;
+            color: #9c0a9c;
+            margin-top: 0;
+            border-radius: 0;
+        }
+
+        .tab button:hover {
+            background-color: #f5d5f5;
+        }
+
+        .tab button.active {
+            background-color: #c20cc2;
+            color: white;
+        }
+
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #e270e2;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            animation: fadeEffect 1s;
+        }
+
+        .code-block {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            border: 1px solid #e270e2;
+        }
+
+        @keyframes fadeEffect {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #9c0a9c;
+            font-size: 14px;
+            border-top: 2px solid #e83ae8;
+            padding-top: 20px;
+        }
+
+        a {
+            color: #c20cc2;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .analogy-box {
+            background-color: #faeaff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            border: 1px solid #e270e2;
+            border-left: 4px solid #c20cc2;
+        }
+
+        .analogy-title {
+            font-weight: bold;
+            color: #9c0a9c;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros,
+        .cons {
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #e270e2;
+        }
+
+        .pros {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+        }
+
+        .cons {
+            background-color: #f8e8e8;
+            border-left: 4px solid #dc3545;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        .scope-info {
+            background-color: #e7f3ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border: 1px solid #0066cc;
+            border-left: 4px solid #0066cc;
+        }
+
+        .demo-button {
+            background-color: #c20cc2;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .demo-button:hover {
+            background-color: #9c0a9c;
+        }
+
+        .demo-button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .slow-element {
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 3s ease;
+        }
+
+        .slow-element.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Selenium Synchronization & Wait Strategies Practice Page</h1>
+
+    <div class="main-tabs">
+        <button class="main-tablinks active" onclick="openMainTab(event, 'ImplicitWaitTab')">Implicit Wait</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'ExplicitWaitTab')">Explicit Wait</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'FluentWaitTab')">Fluent Wait</button>
+    </div>
+
+    <!-- Implicit Wait Tab Content -->
+    <div id="ImplicitWaitTab" class="main-tabcontent" style="display: block;">
+        <h2>Implicit Wait - Global Element Waiting Strategy</h2>
+
+        <div class="method-section">
+            <h3>Understanding Implicit Wait</h3>
+            <div class="method-info">
+                <code>driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);</code> - Sets a global wait time
+                for all element searches.
+            </div>
+
+            <div class="scope-info">
+                <strong>Scope:</strong> Global - applies to all element searches throughout the entire WebDriver
+                session<br>
+                <strong>Default Value:</strong> 0 seconds (no wait)
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🏪 Real-Life Analogy: Shopping Mall Elevator</div>
+                <p>Imagine you're waiting for an elevator in a busy shopping mall. You press the button and decide:
+                    <strong>"I'll wait up to 5 minutes for ANY elevator to arrive."</strong> You don't care which
+                    elevator comes first - you'll take the first one that opens. This is exactly how Implicit Wait
+                    works!
+                </p>
+                <p><strong>Key Point:</strong> Once you set this "5-minute rule," it applies to ALL elevators you wait
+                    for throughout your entire shopping trip.</p>
+            </div>
+
+            <div class="highlight">
+                <strong>When to Use:</strong> When your entire application generally takes the same amount of time to
+                load elements, and you want a simple, one-time setup.
+            </div>
+            <!-- 
+            <div class="code-block">
+// Setting up Implicit Wait - like setting your "patience level" for the entire test
+WebDriver driver = new ChromeDriver();
+
+// This is like saying: "For my entire shopping trip, I'll wait up to 10 seconds for any elevator"
+driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+// Now every time you look for an element, Selenium will wait up to 10 seconds
+WebElement loginButton = driver.findElement(By.id("login-btn"));
+WebElement username = driver.findElement(By.name("username"));
+WebElement password = driver.findElement(By.name("password"));
+
+// All the above elements will have the same 10-second waiting patience
+            </div> -->
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Simple to implement - just one line of code</li>
+                        <li>Applies globally to all elements</li>
+                        <li>Good for consistent loading times</li>
+                        <li>Perfect for beginners</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>Not flexible for different elements</li>
+                        <li>Can slow down tests unnecessarily</li>
+                        <li>Cannot wait for specific conditions</li>
+                        <li>May not work for complex scenarios</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Demo: Implicit Wait Simulation</label>
+                <button class="demo-button" onclick="simulateImplicitWait()">Simulate Implicit Wait (10s
+                    timeout)</button>
+                <div id="implicit-result" class="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Explicit Wait Tab Content -->
+    <div id="ExplicitWaitTab" class="main-tabcontent">
+        <h2>Explicit Wait - Condition-Based Waiting Strategy</h2>
+
+        <div class="method-section">
+            <h3>Understanding Explicit Wait</h3>
+            <div class="method-info">
+                <code>WebDriverWait wait = new WebDriverWait(driver, 20);</code><br>
+                <code>wait.until(ExpectedConditions.elementToBeClickable(By.id("submit")));</code>
+            </div>
+
+            <div class="scope-info">
+                <strong>Scope:</strong> Local - applies only to specific elements where explicitly used<br>
+                <strong>Default Value:</strong> No default - timeout must be specified when creating WebDriverWait
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🍕 Real-Life Analogy: Pizza Delivery</div>
+                <p>You order a pizza and the restaurant says: <strong>"Your pizza will be ready when the oven timer
+                        beeps AND the cheese is perfectly melted."</strong> You're not just waiting for time to pass -
+                    you're waiting for specific conditions to be met. You might check every 30 seconds, but you only
+                    stop waiting when you see that perfect, bubbly cheese!</p>
+                <p><strong>Key Point:</strong> You're waiting for a SPECIFIC condition, not just time. And you can have
+                    different conditions for different orders.</p>
+            </div>
+
+            <div class="highlight">
+                <strong>When to Use:</strong> When you need to wait for specific conditions like element visibility,
+                clickability, or text changes. Perfect for dynamic content and AJAX applications.
+            </div>
+
+            <!-- <div class="code-block">
+                // Setting up Explicit Wait - like having a smart waiter who knows exactly what to look for
+                WebDriver driver = new ChromeDriver();
+                WebDriverWait wait = new WebDriverWait(driver, 20); // Maximum 20 seconds to wait
+
+                // Wait for login button to be clickable (like waiting for pizza to be ready to eat)
+                WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("login-btn")));
+
+                // Wait for welcome message to be visible (like waiting for "Order Ready" sign)
+                WebElement welcomeMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("welcome")));
+
+                // Wait for specific text to appear (like waiting for "Your pizza is ready!" message)
+                wait.until(ExpectedConditions.textToBe(By.id("status"), "Login Successful"));
+
+                // Wait for element to disappear (like waiting for loading spinner to vanish)
+                wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loading-spinner")));
+            </div> -->
+
+            <div class="method-info">
+                <strong>Common ExpectedConditions:</strong><br>
+                • <code>elementToBeClickable()</code> - Element is visible and enabled<br>
+                • <code>visibilityOfElementLocated()</code> - Element is visible on page<br>
+                • <code>presenceOfElementLocated()</code> - Element exists in DOM<br>
+                • <code>textToBe()</code> - Element contains specific text<br>
+                • <code>titleContains()</code> - Page title contains specific text
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Waits for specific conditions</li>
+                        <li>More efficient than fixed waits</li>
+                        <li>Flexible and intelligent</li>
+                        <li>Perfect for dynamic content</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>Requires more code setup</li>
+                        <li>Need to know what condition to wait for</li>
+                        <li>Can be complex for beginners</li>
+                        <li>More verbose than implicit wait</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Demo: Explicit Wait Simulation</label>
+                <button class="demo-button" onclick="simulateExplicitWait()">Simulate Explicit Wait (Waiting for element
+                    to be visible)</button>
+                <div id="explicit-result" class="result"></div>
+                <div class="slow-element" id="explicit-element">I'm the element Explicit Wait is looking for!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fluent Wait Tab Content -->
+    <div id="FluentWaitTab" class="main-tabcontent">
+        <h2>Fluent Wait - Advanced Customizable Waiting Strategy</h2>
+
+        <div class="method-section">
+            <h3>Understanding Fluent Wait</h3>
+            <div class="method-info">
+                <code>FluentWait&lt;WebDriver&gt; fluentWait = new FluentWait&lt;&gt;(driver)</code><br>
+                <code>.withTimeout(Duration.ofSeconds(30)).pollingEvery(Duration.ofSeconds(2));</code>
+            </div>
+
+            <div class="scope-info">
+                <strong>Scope:</strong> Local - applies only to specific elements where the FluentWait instance is
+                used<br>
+                <strong>Default Values:</strong> No defaults - timeout, polling frequency, and exceptions must be
+                explicitly configured
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🎣 Real-Life Analogy: Fishing with Patience</div>
+                <p>You go fishing and decide: <strong>"I'll fish for up to 2 hours, checking my line every 10 seconds.
+                        If I catch a small fish (which I don't want), I'll ignore it and keep waiting for a big fish.
+                        But if there's a storm (exception), I'll ignore that too and keep fishing."</strong></p>
+                <p><strong>Key Point:</strong> You have total control over timing, checking frequency, and what
+                    exceptions to ignore while waiting for your specific goal.</p>
+            </div>
+
+            <div class="highlight">
+                <strong>When to Use:</strong> When you need maximum control over waiting behavior, especially in
+                applications with unpredictable loading times or when you need to ignore specific exceptions.
+            </div>
+            <!-- 
+            <div class="code-block">
+                // Setting up Fluent Wait - like being a patient, smart fisherman
+                WebDriver driver = new ChromeDriver();
+
+                FluentWait&lt;WebDriver&gt; fluentWait = new FluentWait&lt;&gt;(driver)
+                .withTimeout(Duration.ofSeconds(30)) // Fish for maximum 30 seconds
+                .pollingEvery(Duration.ofSeconds(2)) // Check the line every 2 seconds
+                .ignoring(NoSuchElementException.class) // Ignore if element not found yet
+                .ignoring(StaleElementReferenceException.class); // Ignore stale element errors
+
+                // Wait for element to be clickable (like waiting for the perfect fish)
+                WebElement submitButton = fluentWait.until(new Function&lt;WebDriver, WebElement&gt;() {
+                public WebElement apply(WebDriver driver) {
+                WebElement element = driver.findElement(By.id("submit-btn"));
+                if (element.isEnabled() && element.isDisplayed()) {
+                return element; // Found our perfect fish!
+                }
+                return null; // Keep fishing...
+                }
+                });
+
+                // You can also use it with ExpectedConditions
+                WebElement loginButton = fluentWait.until(
+                ExpectedConditions.elementToBeClickable(By.id("login-btn"))
+                );
+            </div> -->
+
+            <div class="method-info">
+                <strong>Fluent Wait Configuration Options:</strong><br>
+                • <code>withTimeout()</code> - Maximum time to wait<br>
+                • <code>pollingEvery()</code> - How often to check the condition<br>
+                • <code>ignoring()</code> - Which exceptions to ignore<br>
+                • <code>withMessage()</code> - Custom error message if condition fails
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Maximum customization and control</li>
+                        <li>Can handle complex scenarios</li>
+                        <li>Configurable polling frequency</li>
+                        <li>Can ignore specific exceptions</li>
+                        <li>Most flexible waiting strategy</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>Most complex to implement</li>
+                        <li>Requires more code</li>
+                        <li>Can be overkill for simple scenarios</li>
+                        <li>Steeper learning curve</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Demo: Fluent Wait Simulation</label>
+                <button class="demo-button" onclick="simulateFluentWait()">Simulate Fluent Wait (Check every 1s for
+                    10s)</button>
+                <div id="fluent-result" class="result"></div>
+                <div id="fluent-status" class="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Selenium Synchronization & Wait Strategies Practice Page</p>
+        <p>Created for educational purposes. <a href="https://www.selenium.dev/">Selenium Documentation</a></p>
+    </footer>
+
+    <script>
+        // Function to handle switching between main tabs
+        function openMainTab(event, tabName) {
+            // Hide all main tab content
+            const mainTabContents = document.getElementsByClassName("main-tabcontent");
+            for (let i = 0; i < mainTabContents.length; i++) {
+                mainTabContents[i].style.display = "none";
+            }
+
+            // Remove the 'active' class from all main tab buttons
+            const mainTabLinks = document.getElementsByClassName("main-tablinks");
+            for (let i = 0; i < mainTabLinks.length; i++) {
+                mainTabLinks[i].classList.remove("active");
+            }
+
+            // Show the selected tab and add the 'active' class to the clicked button
+            document.getElementById(tabName).style.display = "block";
+            event.currentTarget.classList.add("active");
+        }
+
+        function simulateImplicitWait() {
+            const resultDiv = document.getElementById('implicit-result');
+            const button = event.target;
+
+            button.disabled = true;
+            button.textContent = 'Waiting...';
+
+            resultDiv.innerHTML = '<p style="color: #ffc107;">⏳ Implicit Wait activated: Waiting up to 10 seconds for element...</p>';
+
+            // Simulate finding element after random time (1-8 seconds)
+            const findTime = Math.random() * 7000 + 1000;
+
+            setTimeout(() => {
+                resultDiv.innerHTML = `
+                    <p style="color: #28a745;">✅ Element found after ${(findTime / 1000).toFixed(1)} seconds!</p>
+                    <p style="color: #6c757d;">Note: Implicit wait would have waited up to 10 seconds if needed.</p>
+                `;
+                button.disabled = false;
+                button.textContent = 'Simulate Implicit Wait (10s timeout)';
+            }, findTime);
+        }
+
+        function simulateExplicitWait() {
+            const resultDiv = document.getElementById('explicit-result');
+            const element = document.getElementById('explicit-element');
+            const button = event.target;
+
+            button.disabled = true;
+            button.textContent = 'Waiting for condition...';
+            element.classList.remove('show');
+
+            resultDiv.innerHTML = '<p style="color: #ffc107;">⏳ Explicit Wait: Waiting for element to become visible...</p>';
+
+            // Show element after 3 seconds
+            setTimeout(() => {
+                element.classList.add('show');
+                resultDiv.innerHTML = `
+                    <p style="color: #28a745;">✅ Condition met! Element is now visible.</p>
+                    <p style="color: #6c757d;">Explicit wait stopped as soon as the condition was satisfied.</p>
+                `;
+                button.disabled = false;
+                button.textContent = 'Simulate Explicit Wait (Waiting for element to be visible)';
+            }, 3000);
+        }
+
+        function simulateFluentWait() {
+            const resultDiv = document.getElementById('fluent-result');
+            const statusDiv = document.getElementById('fluent-status');
+            const button = event.target;
+
+            button.disabled = true;
+            button.textContent = 'Fluent Wait in progress...';
+
+            resultDiv.innerHTML = '<p style="color: #ffc107;">⏳ Fluent Wait: Checking condition every 1 second for up to 10 seconds...</p>';
+
+            let attempts = 0;
+            const maxAttempts = 10;
+            const checkInterval = 1000;
+
+            const interval = setInterval(() => {
+                attempts++;
+                statusDiv.innerHTML = `<p style="color: #17a2b8;">🔍 Polling attempt ${attempts}/${maxAttempts}...</p>`;
+
+                // Simulate success after 6 attempts
+                if (attempts === 6) {
+                    clearInterval(interval);
+                    resultDiv.innerHTML = `
+                        <p style="color: #28a745;">✅ Condition satisfied after ${attempts} polling attempts!</p>
+                        <p style="color: #6c757d;">Fluent wait found the element with custom polling frequency.</p>
+                    `;
+                    statusDiv.innerHTML = '';
+                    button.disabled = false;
+                    button.textContent = 'Simulate Fluent Wait (Check every 1s for 10s)';
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(interval);
+                    resultDiv.innerHTML = `
+                        <p style="color: #dc3545;">❌ Timeout! Condition not met after ${maxAttempts} seconds.</p>
+                        <p style="color: #6c757d;">Fluent wait exhausted all polling attempts.</p>
+                    `;
+                    statusDiv.innerHTML = '';
+                    button.disabled = false;
+                    button.textContent = 'Simulate Fluent Wait (Check every 1s for 10s)';
+                }
+            }, checkInterval);
+        }
+    </script>
+</body>
+
+</html>
