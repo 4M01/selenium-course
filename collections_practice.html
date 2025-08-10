@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selenium + Collections Practice Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #fef4ff;
+        }
+
+        h1, h2, h3 {
+            color: #9c0a9c;
+            border-bottom: 2px solid #e83ae8;
+            padding-bottom: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .scenario-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e270e2;
+            box-shadow: 0 3px 6px rgba(156, 10, 156, 0.1);
+        }
+
+        .main-tabs {
+            display: flex;
+            overflow: hidden;
+            border: 1px solid #e270e2;
+            background-color: #faeaff;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .main-tabs button {
+            flex: 1;
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            margin-top: 0;
+            border-radius: 0;
+            color: #9c0a9c;
+        }
+
+        .main-tabs button:hover {
+            background-color: #f5d5f5;
+        }
+
+        .main-tabs button.active {
+            background-color: #c20cc2;
+            color: white;
+        }
+
+        .main-tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #e270e2;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            animation: fadeEffect 1s;
+            background-color: #fff;
+        }
+
+        .code-block {
+            background-color: #2d3436;
+            color: #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            border: 1px solid #e270e2;
+        }
+
+        .method-info {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            border: 1px dashed #e270e2;
+        }
+
+        .analogy-box {
+            background-color: #faeaff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            border: 1px solid #e270e2;
+            border-left: 4px solid #c20cc2;
+        }
+
+        .analogy-title {
+            font-weight: bold;
+            color: #9c0a9c;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        .scope-info {
+            background-color: #e7f3ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border: 1px solid #0066cc;
+            border-left: 4px solid #0066cc;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #9c0a9c;
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e270e2;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            max-width: 300px;
+            margin-right: 10px;
+        }
+
+        textarea {
+            max-width: 100%;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #9c0a9c;
+            box-shadow: 0 0 5px rgba(156, 10, 156, 0.3);
+        }
+
+        button {
+            background-color: #c20cc2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 5px 5px 0;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #9c0a9c;
+        }
+
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .clear-btn {
+            background-color: #dc3545;
+        }
+
+        .clear-btn:hover {
+            background-color: #c82333;
+        }
+
+        .generate-btn {
+            background-color: #28a745;
+        }
+
+        .generate-btn:hover {
+            background-color: #218838;
+        }
+
+        .interactive-area {
+            border: 2px dashed #e270e2;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            min-height: 100px;
+            background: #faeaff;
+        }
+
+        .element-box {
+            display: inline-block;
+            background: #c20cc2;
+            color: white;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .element-box:hover {
+            background: #9c0a9c;
+            transform: scale(1.05);
+        }
+
+        .element-box.hidden {
+            background: #6c757d;
+            opacity: 0.5;
+        }
+
+        .element-box.enabled {
+            background: #28a745;
+        }
+
+        .element-box.disabled {
+            background: #dc3545;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #faeaff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e270e2;
+        }
+
+        .result {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            min-height: 20px;
+            border: 1px solid #e270e2;
+        }
+
+        .size-counter {
+            background: #6f42c1;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .test-case {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-left: 4px solid #28a745;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+
+        .test-result {
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 5px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .test-result.pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .test-result.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .test-result.skip {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .bug-item {
+            background: #f8d7da;
+            border: 1px solid #dc3545;
+            border-left: 4px solid #dc3545;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .hint {
+            font-style: italic;
+            color: #9c0a9c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .checkbox-group {
+            margin: 10px 0;
+        }
+
+        .checkbox-group label {
+            display: inline;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        @keyframes fadeEffect {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            input[type="text"], select {
+                max-width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #9c0a9c;
+            font-size: 14px;
+            border-top: 2px solid #e83ae8;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Selenium + Collections Practice Hub</h1>
+    <p style="text-align: center; color: #636e72; font-size: 18px;">
+        Master Java Collections in Real Selenium Automation Scenarios
+    </p>
+
+    <div class="main-tabs">
+        <button class="main-tablinks active" onclick="openMainTab(event, 'ArrayListTab')">ArrayList + WebElements</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'HashMapTab')">HashMap + Page URLs</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'HashSetTab')">HashSet + Unique Tracking</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'StreamsTab')">Streams + Element Filtering</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'ProjectTab')">Complete Test Manager</button>
+    </div>
+
+    <!-- ArrayList + WebElements Tab -->
+    <div id="ArrayListTab" class="main-tabcontent" style="display: block;">
+        <h2>ArrayList for Dynamic Element Collection</h2>
+
+        <div class="scenario-section">
+            <h3>Real Selenium Scenario: Collecting Form Elements</h3>
+            <div class="method-info">
+                In Selenium, you often need to collect multiple elements like buttons, input fields, or links without knowing exactly how many exist on the page.
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🔍 Selenium Reality: Dynamic Element Discovery</div>
+                <p>Imagine you're testing an e-commerce site where the number of product buttons changes based on inventory. You need to collect all "Add to Cart" buttons, but there might be 5 products today and 50 tomorrow. <strong>ArrayList is perfect for this dynamic collection!</strong></p>
+            </div>
+
+            <div class="code-block">
+// Real Selenium Code Example
+ArrayList&lt;WebElement&gt; addToCartButtons = new ArrayList&lt;&gt;();
+
+// Collect all buttons that contain "Add to Cart"
+List&lt;WebElement&gt; foundButtons = driver.findElements(By.xpath("//button[contains(text(), 'Add to Cart')]"));
+addToCartButtons.addAll(foundButtons);
+
+// Now you can interact with each button
+for (WebElement button : addToCartButtons) {
+    if (button.isDisplayed() && button.isEnabled()) {
+        System.out.println("Found clickable button: " + button.getText());
+        // button.click(); // Click each button
+    }
+}
+
+System.out.println("Total Add to Cart buttons found: " + addToCartButtons.size());
+            </div>
+
+            <div class="scope-info">
+                <strong>Why ArrayList for WebElements?</strong><br>
+                • Unknown number of elements at runtime<br>
+                • Need to add/remove elements dynamically<br>
+                • Want to iterate through elements in order<br>
+                • Perfect for collecting search results, form fields, menu items
+            </div>
+
+            <div class="form-group">
+                <label>Simulate: Web Element Collection</label>
+                <div class="interactive-area" id="webElementsArea">
+                    <div class="element-box" data-type="button" onclick="toggleElement(this)">Login Button</div>
+                    <div class="element-box" data-type="button" onclick="toggleElement(this)">Submit Button</div>
+                    <div class="element-box" data-type="input" onclick="toggleElement(this)">Username Field</div>
+                    <div class="element-box" data-type="input" onclick="toggleElement(this)">Password Field</div>
+                    <div class="element-box" data-type="button" onclick="toggleElement(this)">Cancel Button</div>
+                    <div class="element-box" data-type="link" onclick="toggleElement(this)">Forgot Password Link</div>
+                </div>
+                
+                <div class="controls">
+                    <select id="elementTypeFilter">
+                        <option value="all">All Elements</option>
+                        <option value="button">Buttons Only</option>
+                        <option value="input">Input Fields Only</option>
+                        <option value="link">Links Only</option>
+                    </select>
+                    <button onclick="collectElements()">Collect Elements (ArrayList)</button>
+                    <button onclick="addRandomElement()">Add New Element</button>
+                    <button onclick="clearElements()" class="clear-btn">Clear Collection</button>
+                    <span class="size-counter" id="elementCount">Collected: 0</span>
+                </div>
+                
+                <div id="collectedElements" class="interactive-area"></div>
+                <div class="hint">Click elements to toggle visibility. Use filter to collect specific types.</div>
+                <div id="arrayListResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HashMap + Page URLs Tab -->
+    <div id="HashMapTab" class="main-tabcontent">
+        <h2>HashMap for Page Navigation Management</h2>
+
+        <div class="scenario-section">
+            <h3>Real Selenium Scenario: Page Object Pattern with URLs</h3>
+            <div class="method-info">
+                In large test suites, you need quick access to different page URLs. HashMap provides instant lookup by page name.
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🗺️ Selenium Reality: Smart Navigation System</div>
+                <p>Your test suite needs to navigate between Login, Dashboard, Profile, Settings, and Checkout pages. Instead of hardcoding URLs everywhere, you create a <strong>HashMap navigation system</strong> where you can simply say "Go to Dashboard" and get the correct URL instantly!</p>
+            </div>
+
+            <div class="code-block">
+// Real Selenium Code Example
+HashMap&lt;String, String&gt; pageUrls = new HashMap&lt;&gt;();
+
+// Set up your page navigation map
+pageUrls.put("Login", "https://myapp.com/login");
+pageUrls.put("Dashboard", "https://myapp.com/dashboard");
+pageUrls.put("Profile", "https://myapp.com/user/profile");
+pageUrls.put("Settings", "https://myapp.com/settings");
+pageUrls.put("Checkout", "https://myapp.com/checkout");
+
+// Navigation helper method
+public void navigateToPage(String pageName) {
+    String url = pageUrls.get(pageName);
+    if (url != null) {
+        driver.get(url);
+        System.out.println("Navigated to " + pageName + ": " + url);
+    } else {
+        System.out.println("Page not found: " + pageName);
+    }
+}
+
+// Usage in tests
+navigateToPage("Login");     // Goes to login page
+navigateToPage("Dashboard"); // Goes to dashboard
+            </div>
+
+            <div class="scope-info">
+                <strong>Why HashMap for Page Management?</strong><br>
+                • Instant URL lookup by page name<br>
+                • Centralized URL management<br>
+                • Easy to update URLs in one place<br>
+                • Perfect for Page Object Model pattern
+            </div>
+
+            <div class="form-group">
+                <label>Simulate: Page Navigation System</label>
+                <div class="controls">
+                    <input type="text" id="pageName" placeholder="Page Name (e.g., Login)">
+                    <input type="text" id="pageUrl" placeholder="URL (e.g., /login)">
+                    <button onclick="addPageMapping()">Add Page Mapping</button>
+                </div>
+                
+                <div class="controls">
+                    <select id="pageSelect">
+                        <option value="">Select a page to navigate...</option>
+                    </select>
+                    <button onclick="navigateToPage()">Navigate (Selenium Simulation)</button>
+                    <button onclick="clearPageMappings()" class="clear-btn">Clear All Pages</button>
+                    <span class="size-counter" id="pageCount">Pages: 0</span>
+                </div>
+                
+                <div id="pageMapping" class="interactive-area"></div>
+                <div class="hint">Add page mappings, then use the dropdown to simulate navigation</div>
+                <div id="hashMapResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HashSet + Unique Tracking Tab -->
+    <div id="HashSetTab" class="main-tabcontent">
+        <h2>HashSet for Unique Element Tracking</h2>
+
+        <div class="scenario-section">
+            <h3>Real Selenium Scenario: Tracking Visited Pages & Unique Elements</h3>
+            <div class="method-info">
+                Track unique pages visited, unique error messages encountered, or unique test IDs to avoid duplicate processing.
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🔍 Selenium Reality: Smart Duplicate Prevention</div>
+                <p>You're crawling a website and testing every unique link, but some links appear multiple times on different pages. <strong>HashSet ensures you test each unique URL only once</strong>, saving time and avoiding duplicate test runs!</p>
+            </div>
+
+            <div class="code-block">
+// Real Selenium Code Example
+HashSet&lt;String&gt; visitedUrls = new HashSet&lt;&gt;();
+HashSet&lt;String&gt; uniqueErrorMessages = new HashSet&lt;&gt;();
+
+// Track visited pages to avoid re-testing
+public boolean shouldVisitPage(String url) {
+    if (visitedUrls.contains(url)) {
+        System.out.println("Page already tested: " + url);
+        return false;
+    } else {
+        visitedUrls.add(url);
+        System.out.println("Testing new page: " + url);
+        return true;
+    }
+}
+
+// Collect unique error messages during testing
+public void checkForErrors() {
+    List&lt;WebElement&gt; errorElements = driver.findElements(By.className("error-message"));
+    for (WebElement error : errorElements) {
+        String errorText = error.getText();
+        if (uniqueErrorMessages.add(errorText)) {
+            System.out.println("New error found: " + errorText);
+            // Log new error for analysis
+        }
+    }
+}
+            </div>
+
+            <div class="scope-info">
+                <strong>Why HashSet for Tracking?</strong><br>
+                • Automatic duplicate prevention<br>
+                • Fast membership testing (visited or not?)<br>
+                • Memory efficient for large test suites<br>
+                • Perfect for URL tracking, error collection, ID tracking
+            </div>
+
+            <div class="form-group">
+                <label>Simulate: Unique Page Tracking System</label>
+                <div class="controls">
+                    <input type="text" id="urlToVisit" placeholder="Enter page URL to visit">
+                    <button onclick="visitUrl()">Visit Page</button>
+                    <button onclick="checkIfVisited()">Check If Visited</button>
+                    <button onclick="clearVisitedUrls()" class="clear-btn">Clear History</button>
+                    <span class="size-counter" id="visitedCount">Unique Pages: 0</span>
+                </div>
+                
+                <div id="visitedUrls" class="interactive-area"></div>
+                
+                <div class="controls">
+                    <input type="text" id="errorMessage" placeholder="Enter error message found">
+                    <button onclick="addErrorMessage()">Report Error</button>
+                    <button onclick="clearErrors()" class="clear-btn">Clear Errors</button>
+                    <span class="size-counter" id="errorCount">Unique Errors: 0</span>
+                </div>
+                
+                <div id="uniqueErrors" class="interactive-area"></div>
+                <div class="hint">Try adding the same URL or error multiple times - duplicates will be rejected!</div>
+                <div id="hashSetResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Streams + Element Filtering Tab -->
+    <div id="StreamsTab" class="main-tabcontent">
+        <h2>Streams for Smart Element Filtering</h2>
+
+        <div class="scenario-section">
+            <h3>Real Selenium Scenario: Advanced Element Processing</h3>
+            <div class="method-info">
+                Filter, transform, and process web elements using Java Streams for more efficient and readable automation code.
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">⚡ Selenium Reality: Smart Element Processing Pipeline</div>
+                <p>You have 50 buttons on a page, but you only want to click the <strong>visible, enabled ones that contain 'Submit'</strong>. Streams let you create a smart filtering pipeline: find all buttons → keep only visible ones → keep only enabled ones → keep only those with 'Submit' text → click them!</p>
+            </div>
+
+            <div class="code-block">
+// Real Selenium Code Example - Smart Element Processing
+List&lt;WebElement&gt; allButtons = driver.findElements(By.tagName("button"));
+
+// Traditional approach (verbose and hard to read)
+List&lt;WebElement&gt; clickableSubmitButtons = new ArrayList&lt;&gt;();
+for (WebElement button : allButtons) {
+    if (button.isDisplayed() && button.isEnabled() && 
+        button.getText().toLowerCase().contains("submit")) {
+        clickableSubmitButtons.add(button);
+    }
+}
+
+// Streams approach (clean and readable)
+List&lt;WebElement&gt; clickableButtons = allButtons.stream()
+    .filter(WebElement::isDisplayed)           // Only visible elements
+    .filter(WebElement::isEnabled)             // Only enabled elements  
+    .filter(btn -&gt; btn.getText().toLowerCase().contains("submit")) // Only submit buttons
+    .collect(Collectors.toList());             // Collect results
+
+// Click all filtered buttons
+clickableButtons.forEach(WebElement::click);
+
+System.out.println("Clicked " + clickableButtons.size() + " submit buttons");
+            </div>
+
+            <div class="scope-info">
+                <strong>Why Streams for Element Processing?</strong><br>
+                • Clean, readable filtering logic<br>
+                • Chain multiple conditions easily<br>
+                • Functional programming approach<br>
+                • Perfect for complex element selection criteria
+            </div>
+
+            <div class="form-group">
+                <label>Simulate: Element Filtering Pipeline</label>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Available Web Elements</h3>
+                        <div id="allWebElements" class="interactive-area">
+                            <div class="element-box enabled" data-visible="true" data-enabled="true" data-text="Submit Form">Submit Form</div>
+                            <div class="element-box hidden" data-visible="false" data-enabled="true" data-text="Hidden Submit">Hidden Submit</div>
+                            <div class="element-box disabled" data-visible="true" data-enabled="false" data-text="Disabled Button">Disabled Button</div>
+                            <div class="element-box enabled" data-visible="true" data-enabled="true" data-text="Cancel Action">Cancel Action</div>
+                            <div class="element-box enabled" data-visible="true" data-enabled="true" data-text="Submit Order">Submit Order</div>
+                            <div class="element-box enabled" data-visible="true" data-enabled="true" data-text="Save Draft">Save Draft</div>
+                            <div class="element-box hidden" data-visible="false" data-enabled="false" data-text="Submit Payment">Submit Payment</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Filter Conditions (Stream Pipeline)</h3>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="filterVisible" checked> Only Visible Elements</label><br>
+                            <label><input type="checkbox" id="filterEnabled" checked> Only Enabled Elements</label><br>
+                        </div>
+                        <input type="text" id="filterText" placeholder="Contains text (e.g., Submit)"><br>
+                        <button onclick="applyStreamFilters()">Apply Stream Filters</button>
+                        <button onclick="resetStreamFilters()">Reset Filters</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Filtered Results (Stream Output)</label>
+                    <div id="streamResults" class="interactive-area"></div>
+                    <div class="hint">Use checkboxes and text filter to see Stream processing in action</div>
+                </div>
+                
+                <div id="streamsResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complete Test Manager Tab -->
+    <div id="ProjectTab" class="main-tabcontent">
+        <h2>Complete Test Data Manager - All Collections Combined</h2>
+
+        <div class="scenario-section">
+            <h3>Real-World Project: Comprehensive Test Automation System</h3>
+            <div class="method-info">
+                Combine all collection types to build a complete test management system that real automation engineers use.
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🏗️ Selenium Reality: Enterprise Test Management</div>
+                <p>You're building a complete test automation framework that needs to: manage test data categories (Array), store dynamic test cases (ArrayList), map test results (HashMap), and track unique bugs (HashSet). This is how real automation teams organize their test suites!</p>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>Test Categories (Array)</h3>
+                    <div id="testCategories" class="interactive-area">
+                        <div class="element-box">Smoke Tests</div>
+                        <div class="element-box">Regression Tests</div>
+                        <div class="element-box">Integration Tests</div>
+                        <div class="element-box">UI Tests</div>
+                    </div>
+                    <div class="hint">Fixed test categories for your framework</div>
+                </div>
+                
+                <div class="card">
+                    <h3>Dynamic Test Cases (ArrayList)</h3>
+                    <input type="text" id="newTestCase" placeholder="Enter test case name">
+                    <button onclick="addTestCase()">Add Test Case</button>
+                    <div id="testCasesList" class="interactive-area"></div>
+                    <span class="size-counter" id="testCaseCount">Test Cases: 0</span>
+                </div>
+                
+                <div class="card">
+                    <h3>Test Results (HashMap)</h3>
+                    <input type="text" id="testCaseName" placeholder="Test case name">
+                    <select id="testResultStatus">
+                        <option value="PASS">PASS</option>
+                        <option value="FAIL">FAIL</option>
+                        <option value="SKIP">SKIP</option>
+                    </select>
+                    <button onclick="addTestResult()">Update Result</button>
+                    <div id="testResultsDisplay" class="interactive-area"></div>
+                    <span class="size-counter" id="testResultCount">Results: 0</span>
+                </div>
+                
+                <div class="card">
+                    <h3>Unique Bugs Found (HashSet)</h3>
+                    <input type="text" id="bugId" placeholder="Bug ID (e.g., BUG-001)">
+                    <button onclick="reportBug()">Report Bug</button>
+                    <div id="uniqueBugs" class="interactive-area"></div>
+                    <span class="size-counter" id="bugCount">Unique Bugs: 0</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button onclick="generateTestReport()" class="generate-btn" style="width: 100%; padding: 15px; font-size: 16px;">
+                    📊 Generate Complete Test Report (Using All Collections + Streams)
+                </button>
+                <div id="finalTestReport" class="result" style="display: none;"></div>
+            </div>
+
+            <div class="code-block">
+// This is what your complete system looks like in real Selenium code:
+
+public class TestManager {
+    // Fixed test categories (Array)
+    private String[] testCategories = {"Smoke Tests", "Regression Tests", "Integration Tests", "UI Tests"};
+    
+    // Dynamic test cases (ArrayList)
+    private ArrayList&lt;String&gt; testCases = new ArrayList&lt;&gt;();
+    
+    // Test results mapping (HashMap)
+    private HashMap&lt;String, String&gt; testResults = new HashMap&lt;&gt;();
+    
+    // Unique bugs found (HashSet)
+    private HashSet&lt;String&gt; uniqueBugs = new HashSet&lt;&gt;();
+    
+    // Add test case to suite
+    public void addTestCase(String testCase) {
+        testCases.add(testCase);
+    }
+    
+    // Update test result
+    public void updateTestResult(String testCase, String result) {
+        testResults.put(testCase, result);
+    }
+    
+    // Report unique bug
+    public boolean reportBug(String bugId) {
+        return uniqueBugs.add(bugId); // Returns false if already exists
+    }
+    
+    // Generate comprehensive report using Streams
+    public void generateReport() {
+        System.out.println("=== TEST EXECUTION REPORT ===");
+        
+        // Stream processing for analysis
+        long passedTests = testResults.values().stream()
+            .filter(result -&gt; result.equals("PASS"))
+            .count();
+            
+        long failedTests = testResults.values().stream()
+            .filter(result -&gt; result.equals("FAIL"))
+            .count();
+            
+        System.out.println("Total Test Cases: " + testCases.size());
+        System.out.println("Passed: " + passedTests);
+        System.out.println("Failed: " + failedTests);
+        System.out.println("Unique Bugs Found: " + uniqueBugs.size());
+    }
+}
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Selenium + Collections Practice Hub</p>
+        <p>Master Collections, Master Selenium Automation!</p>
+    </footer>
+
+    <script>
+        // Global variables for different collection demos
+        let collectedElements = [];
+        let pageUrlMappings = new Map();
+        let visitedUrlSet = new Set();
+        let uniqueErrorSet = new Set();
+        let testCasesList = [];
+        let testResultsMap = new Map();
+        let bugReportSet = new Set();
+
+        // Function to handle switching between main tabs
+        function openMainTab(event, tabName) {
+            const mainTabContents = document.getElementsByClassName("main-tabcontent");
+            for (let i = 0; i < mainTabContents.length; i++) {
+                mainTabContents[i].style.display = "none";
+            }
+
+            const mainTabLinks = document.getElementsByClassName("main-tablinks");
+            for (let i = 0; i < mainTabLinks.length; i++) {
+                mainTabLinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            event.currentTarget.classList.add("active");
+        }
+
+        // ArrayList Demo - Web Element Collection
+        function toggleElement(element) {
+            element.classList.toggle('hidden');
+            const isVisible = !element.classList.contains('hidden');
+            element.dataset.visible = isVisible;
+        }
+
+        function collectElements() {
+            const filterType = document.getElementById('elementTypeFilter').value;
+            const elements = document.querySelectorAll('#webElementsArea .element-box:not(.hidden)');
+            
+            collectedElements = [];
+            elements.forEach(el => {
+                const elementType = el.dataset.type;
+                if (filterType === 'all' || filterType === elementType) {
+                    collectedElements.push({
+                        text: el.textContent,
+                        type: elementType,
+                        visible: el.dataset.visible === 'true'
+                    });
+                }
+            });
+
+            displayCollectedElements();
+            showResult('arrayListResult', 
+                `Collected ${collectedElements.length} elements of type: ${filterType}`, 'success');
+        }
+
+        function addRandomElement() {
+            const types = ['button', 'input', 'link'];
+            const names = ['New Button', 'Input Field', 'Dynamic Link', 'Generated Element'];
+            const randomType = types[Math.floor(Math.random() * types.length)];
+            const randomName = names[Math.floor(Math.random() * names.length)] + ' ' + Date.now();
+
+            const container = document.getElementById('webElementsArea');
+            const newElement = document.createElement('div');
+            newElement.className = 'element-box';
+            newElement.dataset.type = randomType;
+            newElement.dataset.visible = 'true';
+            newElement.textContent = randomName;
+            newElement.onclick = function() { toggleElement(this); };
+            container.appendChild(newElement);
+
+            showResult('arrayListResult', `Added new ${randomType}: ${randomName}`, 'info');
+        }
+
+        function clearElements() {
+            collectedElements = [];
+            displayCollectedElements();
+            showResult('arrayListResult', 'Element collection cleared!', 'info');
+        }
+
+        function displayCollectedElements() {
+            const display = document.getElementById('collectedElements');
+            const counter = document.getElementById('elementCount');
+            
+            display.innerHTML = '';
+            counter.textContent = `Collected: ${collectedElements.length}`;
+
+            if (collectedElements.length === 0) {
+                display.innerHTML = '<div style="color: #666;">No elements collected yet</div>';
+                return;
+            }
+
+            collectedElements.forEach((element, index) => {
+                const div = document.createElement('div');
+                div.className = 'element-box';
+                div.style.background = element.type === 'button' ? '#c20cc2' : 
+                                    element.type === 'input' ? '#28a745' : '#17a2b8';
+                div.innerHTML = `[${index}] ${element.text} (${element.type})`;
+                display.appendChild(div);
+            });
+        }
+
+        // HashMap Demo - Page URL Management
+        function addPageMapping() {
+            const nameInput = document.getElementById('pageName');
+            const urlInput = document.getElementById('pageUrl');
+            const name = nameInput.value.trim();
+            const url = urlInput.value.trim();
+
+            if (!name || !url) {
+                showResult('hashMapResult', 'Please enter both page name and URL!', 'error');
+                return;
+            }
+
+            const wasUpdate = pageUrlMappings.has(name);
+            pageUrlMappings.set(name, url);
+
+            // Update dropdown
+            updatePageDropdown();
+            displayPageMappings();
+
+            nameInput.value = '';
+            urlInput.value = '';
+
+            if (wasUpdate) {
+                showResult('hashMapResult', `Updated ${name} URL to: ${url}`, 'info');
+            } else {
+                showResult('hashMapResult', `Added new page mapping: ${name} → ${url}`, 'success');
+            }
+        }
+
+        function updatePageDropdown() {
+            const select = document.getElementById('pageSelect');
+            // Clear existing options except the first one
+            while (select.children.length > 1) {
+                select.removeChild(select.lastChild);
+            }
+
+            pageUrlMappings.forEach((url, name) => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
+        }
+
+        function navigateToPage() {
+            const selectedPage = document.getElementById('pageSelect').value;
+            if (!selectedPage) {
+                showResult('hashMapResult', 'Please select a page!', 'error');
+                return;
+            }
+
+            const url = pageUrlMappings.get(selectedPage);
+            showResult('hashMapResult', 
+                `🌐 Selenium Navigation: driver.get("${url}") // Going to ${selectedPage}`, 'success');
+        }
+
+        function clearPageMappings() {
+            pageUrlMappings.clear();
+            updatePageDropdown();
+            displayPageMappings();
+            showResult('hashMapResult', 'All page mappings cleared!', 'info');
+        }
+
+        function displayPageMappings() {
+            const display = document.getElementById('pageMapping');
+            const counter = document.getElementById('pageCount');
+            
+            display.innerHTML = '';
+            counter.textContent = `Pages: ${pageUrlMappings.size}`;
+
+            if (pageUrlMappings.size === 0) {
+                display.innerHTML = '<div style="color: #666;">No page mappings yet</div>';
+                return;
+            }
+
+            pageUrlMappings.forEach((url, name) => {
+                const div = document.createElement('div');
+                div.className = 'element-box';
+                div.style.background = '#28a745';
+                div.innerHTML = `<strong>${name}</strong> → ${url}`;
+                display.appendChild(div);
+            });
+        }
+
+        // HashSet Demo - Unique Tracking
+        function visitUrl() {
+            const input = document.getElementById('urlToVisit');
+            const url = input.value.trim();
+
+            if (!url) {
+                showResult('hashSetResult', 'Please enter a URL!', 'error');
+                return;
+            }
+
+            const sizeBefore = visitedUrlSet.size;
+            visitedUrlSet.add(url);
+            const sizeAfter = visitedUrlSet.size;
+
+            displayVisitedUrls();
+            input.value = '';
+
+            if (sizeBefore === sizeAfter) {
+                showResult('hashSetResult', 
+                    `🚫 Duplicate URL detected: ${url} was already visited!`, 'error');
+            } else {
+                showResult('hashSetResult', 
+                    `✅ New URL visited: ${url} (Total unique: ${sizeAfter})`, 'success');
+            }
+        }
+
+        function checkIfVisited() {
+            const input = document.getElementById('urlToVisit');
+            const url = input.value.trim();
+
+            if (!url) {
+                showResult('hashSetResult', 'Please enter a URL to check!', 'error');
+                return;
+            }
+
+            const isVisited = visitedUrlSet.has(url);
+            showResult('hashSetResult', 
+                `${isVisited ? '✅' : '❌'} URL ${url} ${isVisited ? 'HAS' : 'has NOT'} been visited`, 
+                isVisited ? 'success' : 'info');
+        }
+
+        function clearVisitedUrls() {
+            visitedUrlSet.clear();
+            displayVisitedUrls();
+            showResult('hashSetResult', 'Visited URL history cleared!', 'info');
+        }
+
+        function addErrorMessage() {
+            const input = document.getElementById('errorMessage');
+            const error = input.value.trim();
+
+            if (!error) {
+                showResult('hashSetResult', 'Please enter an error message!', 'error');
+                return;
+            }
+
+            const sizeBefore = uniqueErrorSet.size;
+            uniqueErrorSet.add(error);
+            const sizeAfter = uniqueErrorSet.size;
+
+            displayUniqueErrors();
+            input.value = '';
+
+            if (sizeBefore === sizeAfter) {
+                showResult('hashSetResult', 
+                    `🚫 Duplicate error: "${error}" already reported!`, 'error');
+            } else {
+                showResult('hashSetResult', 
+                    `🐛 New error logged: "${error}" (Total unique: ${sizeAfter})`, 'success');
+            }
+        }
+
+        function clearErrors() {
+            uniqueErrorSet.clear();
+            displayUniqueErrors();
+            showResult('hashSetResult', 'Error log cleared!', 'info');
+        }
+
+        function displayVisitedUrls() {
+            const display = document.getElementById('visitedUrls');
+            const counter = document.getElementById('visitedCount');
+            
+            display.innerHTML = '';
+            counter.textContent = `Unique Pages: ${visitedUrlSet.size}`;
+
+            if (visitedUrlSet.size === 0) {
+                display.innerHTML = '<div style="color: #666;">No pages visited yet</div>';
+                return;
+            }
+
+            visitedUrlSet.forEach(url => {
+                const div = document.createElement('div');
+                div.className = 'element-box';
+                div.style.background = '#17a2b8';
+                div.textContent = url;
+                display.appendChild(div);
+            });
+        }
+
+        function displayUniqueErrors() {
+            const display = document.getElementById('uniqueErrors');
+            const counter = document.getElementById('errorCount');
+            
+            display.innerHTML = '';
+            counter.textContent = `Unique Errors: ${uniqueErrorSet.size}`;
+
+            if (uniqueErrorSet.size === 0) {
+                display.innerHTML = '<div style="color: #666;">No errors reported yet</div>';
+                return;
+            }
+
+            uniqueErrorSet.forEach(error => {
+                const div = document.createElement('div');
+                div.className = 'bug-item';
+                div.textContent = error;
+                display.appendChild(div);
+            });
+        }
+
+        // Streams Demo - Element Filtering
+        function applyStreamFilters() {
+            const elements = document.querySelectorAll('#allWebElements .element-box');
+            const filterVisible = document.getElementById('filterVisible').checked;
+            const filterEnabled = document.getElementById('filterEnabled').checked;
+            const filterText = document.getElementById('filterText').value.toLowerCase();
+
+            // Simulate Stream processing
+            const filteredElements = Array.from(elements).filter(el => {
+                const isVisible = el.dataset.visible === 'true';
+                const isEnabled = el.dataset.enabled === 'true';
+                const containsText = el.dataset.text.toLowerCase().includes(filterText);
+
+                return (!filterVisible || isVisible) && 
+                       (!filterEnabled || isEnabled) && 
+                       (filterText === '' || containsText);
+            });
+
+            displayStreamResults(elements.length, filteredElements);
+        }
+
+        function resetStreamFilters() {
+            document.getElementById('filterVisible').checked = true;
+            document.getElementById('filterEnabled').checked = true;
+            document.getElementById('filterText').value = '';
+            document.getElementById('streamResults').innerHTML = '';
+            showResult('streamsResult', 'Filters reset', 'info');
+        }
+
+        function displayStreamResults(totalElements, filteredElements) {
+            const display = document.getElementById('streamResults');
+            display.innerHTML = '<h4>Stream Processing Results:</h4>';
+
+            if (filteredElements.length === 0) {
+                display.innerHTML += '<div style="color: #666;">No elements match your filter criteria</div>';
+            } else {
+                filteredElements.forEach(el => {
+                    const clone = el.cloneNode(true);
+                    clone.onclick = null;
+                    display.appendChild(clone);
+                });
+            }
+
+            showResult('streamsResult', 
+                `Stream processed ${totalElements} elements → filtered to ${filteredElements.length} matches`, 
+                'success');
+        }
+
+        // Complete Test Manager Demo
+        function addTestCase() {
+            const input = document.getElementById('newTestCase');
+            const testCase = input.value.trim();
+
+            if (!testCase) {
+                showResult('finalTestReport', 'Please enter a test case name!', 'error');
+                return;
+            }
+
+            testCasesList.push(testCase);
+            displayTestCases();
+            input.value = '';
+        }
+
+        function addTestResult() {
+            const nameInput = document.getElementById('testCaseName');
+            const statusSelect = document.getElementById('testResultStatus');
+            const testName = nameInput.value.trim();
+            const status = statusSelect.value;
+
+            if (!testName) {
+                showResult('finalTestReport', 'Please enter a test case name!', 'error');
+                return;
+            }
+
+            testResultsMap.set(testName, status);
+            displayTestResults();
+            nameInput.value = '';
+        }
+
+        function reportBug() {
+            const input = document.getElementById('bugId');
+            const bugId = input.value.trim();
+
+            if (!bugId) {
+                showResult('finalTestReport', 'Please enter a bug ID!', 'error');
+                return;
+            }
+
+            const sizeBefore = bugReportSet.size;
+            bugReportSet.add(bugId);
+            const sizeAfter = bugReportSet.size;
+
+            displayBugs();
+            input.value = '';
+
+            if (sizeBefore === sizeAfter) {
+                showResult('finalTestReport', `Bug ${bugId} already reported!`, 'error');
+            } else {
+                showResult('finalTestReport', `New bug reported: ${bugId}`, 'success');
+            }
+        }
+
+        function displayTestCases() {
+            const display = document.getElementById('testCasesList');
+            const counter = document.getElementById('testCaseCount');
+            
+            display.innerHTML = '';
+            counter.textContent = `Test Cases: ${testCasesList.length}`;
+
+            testCasesList.forEach((testCase, index) => {
+                const div = document.createElement('div');
+                div.className = 'test-case';
+                div.innerHTML = `[${index}] ${testCase}`;
+                display.appendChild(div);
+            });
+        }
+
+        function displayTestResults() {
+            const display = document.getElementById('testResultsDisplay');
+            const counter = document.getElementById('testResultCount');
+            
+            display.innerHTML = '';
+            counter.textContent = `Results: ${testResultsMap.size}`;
+
+            testResultsMap.forEach((status, testName) => {
+                const div = document.createElement('div');
+                div.className = `test-result ${status.toLowerCase()}`;
+                div.innerHTML = `${testName}: ${status}`;
+                display.appendChild(div);
+            });
+        }
+
+        function displayBugs() {
+            const display = document.getElementById('uniqueBugs');
+            const counter = document.getElementById('bugCount');
+            
+            display.innerHTML = '';
+            counter.textContent = `Unique Bugs: ${bugReportSet.size}`;
+
+            bugReportSet.forEach(bugId => {
+                const div = document.createElement('div');
+                div.className = 'bug-item';
+                div.textContent = bugId;
+                display.appendChild(div);
+            });
+        }
+
+        function generateTestReport() {
+            // Simulate Stream processing for report generation
+            const totalTests = testCasesList.length;
+            const resultsArray = Array.from(testResultsMap.values());
+            
+            const passedCount = resultsArray.filter(result => result === 'PASS').length;
+            const failedCount = resultsArray.filter(result => result === 'FAIL').length;
+            const skippedCount = resultsArray.filter(result => result === 'SKIP').length;
+            
+            const passRate = totalTests > 0 ? ((passedCount / resultsArray.length) * 100).toFixed(1) : 0;
+
+            const reportHtml = `
+                <h3>🎯 COMPREHENSIVE TEST EXECUTION REPORT</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 15px 0;">
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Total Test Cases</h4>
+                        <div style="font-size: 24px; font-weight: bold; color: #28a745;">${totalTests}</div>
+                        <small>(ArrayList size)</small>
+                    </div>
+                    <div style="background: #d4edda; padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Passed</h4>
+                        <div style="font-size: 24px; font-weight: bold; color: #155724;">${passedCount}</div>
+                        <small>(${passRate}% pass rate)</small>
+                    </div>
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Failed</h4>
+                        <div style="font-size: 24px; font-weight: bold; color: #721c24;">${failedCount}</div>
+                        <small>(HashMap filtered)</small>
+                    </div>
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Skipped</h4>
+                        <div style="font-size: 24px; font-weight: bold; color: #856404;">${skippedCount}</div>
+                        <small>(HashMap filtered)</small>
+                    </div>
+                    <div style="background: #faeaff; padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Unique Bugs</h4>
+                        <div style="font-size: 24px; font-weight: bold; color: #9c0a9c;">${bugReportSet.size}</div>
+                        <small>(HashSet count)</small>
+                    </div>
+                    <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Page Mappings</h4>
+                        <div style="font-size: 24px; font-weight: bold; color: #0066cc;">${pageUrlMappings.size}</div>
+                        <small>(HashMap entries)</small>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h4>📊 Collections Used in This Report:</h4>
+                    <ul>
+                        <li><strong>Array:</strong> Fixed test categories (4 categories)</li>
+                        <li><strong>ArrayList:</strong> Dynamic test cases (${totalTests} tests)</li>
+                        <li><strong>HashMap:</strong> Test results mapping (${testResultsMap.size} results)</li>
+                        <li><strong>HashSet:</strong> Unique bug tracking (${bugReportSet.size} unique bugs)</li>
+                        <li><strong>Streams:</strong> Used for report calculations and filtering</li>
+                    </ul>
+                </div>
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🚀 This is exactly how real Selenium automation frameworks work!</strong><br>
+                    You've just built a complete test management system using all Java collections.
+                </div>
+            `;
+
+            const reportDiv = document.getElementById('finalTestReport');
+            reportDiv.style.display = 'block';
+            reportDiv.innerHTML = reportHtml;
+        }
+
+        // Utility function to show results
+        function showResult(elementId, message, type) {
+            const resultEl = document.getElementById(elementId);
+            resultEl.style.display = 'block';
+            resultEl.innerHTML = message;
+
+            // Color coding based on type
+            switch(type) {
+                case 'success':
+                    resultEl.style.background = '#d4edda';
+                    resultEl.style.color = '#155724';
+                    resultEl.style.borderColor = '#c3e6cb';
+                    break;
+                case 'error':
+                    resultEl.style.background = '#f8d7da';
+                    resultEl.style.color = '#721c24';
+                    resultEl.style.borderColor = '#f5c6cb';
+                    break;
+                case 'info':
+                    resultEl.style.background = '#d1ecf1';
+                    resultEl.style.color = '#0c5460';
+                    resultEl.style.borderColor = '#bee5eb';
+                    break;
+                default:
+                    resultEl.style.background = '#faeaff';
+                    resultEl.style.color = '#333';
+                    resultEl.style.borderColor = '#e270e2';
+            }
+
+            // Auto-hide after 4 seconds
+            setTimeout(() => {
+                resultEl.style.display = 'none';
+            }, 4000);
+        }
+
+        // Initialize displays on page load
+        window.onload = function() {
+            displayCollectedElements();
+            displayPageMappings();
+            displayVisitedUrls();
+            displayUniqueErrors();
+            displayTestCases();
+            displayTestResults();
+            displayBugs();
+        };
+
+        // Add Enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                const elementId = activeElement.id;
+                
+                switch(elementId) {
+                    case 'pageName':
+                    case 'pageUrl':
+                        addPageMapping();
+                        break;
+                    case 'urlToVisit':
+                        visitUrl();
+                        break;
+                    case 'errorMessage':
+                        addErrorMessage();
+                        break;
+                    case 'newTestCase':
+                        addTestCase();
+                        break;
+                    case 'testCaseName':
+                        addTestResult();
+                        break;
+                    case 'bugId':
+                        reportBug();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
