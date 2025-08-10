@@ -682,7 +682,7 @@ WebElement password = driver.findElement(By.name("password"));
             setTimeout(() => {
                 resultDiv.innerHTML = `
                     <p style="color: #28a745;">✅ Element found after ${(findTime / 1000).toFixed(1)} seconds!</p>
-                    <p style="color: #6c757d;">Note: Implicit wait would have waited up to 10 seconds if needed.</p>
+                    <p style="color: #6c757d;">Note: Implicit wait would have waited up to 10 seconds if needed.</p> 
                 `;
                 button.disabled = false;
                 button.textContent = 'Simulate Implicit Wait (10s timeout)';

@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Collections Interactive Practice Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #fef4ff;
+        }
+
+        h1, h2, h3 {
+            color: #9c0a9c;
+            border-bottom: 2px solid #e83ae8;
+            padding-bottom: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .collection-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e270e2;
+            box-shadow: 0 3px 6px rgba(156, 10, 156, 0.1);
+        }
+
+        .main-tabs {
+            display: flex;
+            overflow: hidden;
+            border: 1px solid #e270e2;
+            background-color: #faeaff;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .main-tabs button {
+            flex: 1;
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            margin-top: 0;
+            border-radius: 0;
+            color: #9c0a9c;
+        }
+
+        .main-tabs button:hover {
+            background-color: #f5d5f5;
+        }
+
+        .main-tabs button.active {
+            background-color: #c20cc2;
+            color: white;
+        }
+
+        .main-tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #e270e2;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            animation: fadeEffect 1s;
+            background-color: #fff;
+        }
+
+        .method-info {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            border: 1px dashed #e270e2;
+        }
+
+        .analogy-box {
+            background-color: #faeaff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            border: 1px solid #e270e2;
+            border-left: 4px solid #c20cc2;
+        }
+
+        .analogy-title {
+            font-weight: bold;
+            color: #9c0a9c;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #e270e2;
+        }
+
+        .pros {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+        }
+
+        .cons {
+            background-color: #f8e8e8;
+            border-left: 4px solid #dc3545;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        .scope-info {
+            background-color: #e7f3ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border: 1px solid #0066cc;
+            border-left: 4px solid #0066cc;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #9c0a9c;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e270e2;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            max-width: 300px;
+            margin-right: 10px;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #9c0a9c;
+            box-shadow: 0 0 5px rgba(156, 10, 156, 0.3);
+        }
+
+        button {
+            background-color: #c20cc2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 5px 5px 0;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #9c0a9c;
+        }
+
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .clear-btn {
+            background-color: #dc3545;
+        }
+
+        .clear-btn:hover {
+            background-color: #c82333;
+        }
+
+        .container-display {
+            min-height: 100px;
+            border: 2px dashed #e270e2;
+            border-radius: 8px;
+            padding: 15px;
+            background: #faeaff;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .item {
+            background: #c20cc2;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            position: relative;
+            display: inline-block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .item.duplicate {
+            background: #dc3545;
+            animation: shake 0.5s ease;
+        }
+
+        .index-label {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: #2d3748;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .map-item {
+            background: #28a745;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .map-key {
+            background: rgba(255,255,255,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .result {
+            background-color: #faeaff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            min-height: 20px;
+            border: 1px solid #e270e2;
+        }
+
+        .size-counter {
+            background: #6f42c1;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            background: #faeaff;
+        }
+
+        .hint {
+            font-style: italic;
+            color: #9c0a9c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        @keyframes fadeEffect {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 768px) {
+            .pros-cons, .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            input[type="text"], select {
+                max-width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #9c0a9c;
+            font-size: 14px;
+            border-top: 2px solid #e83ae8;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Java Collections Interactive Practice Page</h1>
+
+    <div class="main-tabs">
+        <button class="main-tablinks active" onclick="openMainTab(event, 'ArrayTab')">Array</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'ArrayListTab')">ArrayList</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'HashMapTab')">HashMap</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'HashSetTab')">HashSet</button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'ComparisonTab')">Comparison</button>
+    </div>
+
+    <!-- Array Tab Content -->
+    <div id="ArrayTab" class="main-tabcontent" style="display: block;">
+        <h2>Array - Fixed Size Container</h2>
+
+        <div class="collection-section">
+            <h3>Understanding Arrays</h3>
+            <div class="method-info">
+                <code>String[] apartments = new String[5];</code> - Creates a fixed-size array with 5 slots
+            </div>
+
+            <div class="scope-info">
+                <strong>Size:</strong> Fixed at creation time<br>
+                <strong>Access:</strong> By index (starting from 0)<br>
+                <strong>Performance:</strong> Fastest access time
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🏢 Real-Life Analogy: Apartment Building</div>
+                <p>Think of an Array as a <strong>fixed apartment building</strong>. When the building is constructed, it has exactly 5 floors (indices 0-4). You can't add more floors later, but you can change who lives on each floor. Each apartment has a specific number (index), and you can quickly find any resident by going directly to their floor.</p>
+                <p><strong>Key Point:</strong> Once built, the building size never changes - that's the main limitation and strength of arrays!</p>
+            </div>
+
+            <div class="highlight">
+                <strong>When to Use:</strong> When you know exactly how many elements you need and want the fastest possible access. Perfect for fixed data like days of the week or months of the year.
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Fastest access by index</li>
+                        <li>Memory efficient</li>
+                        <li>Simple and straightforward</li>
+                        <li>Works with primitive types</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>Fixed size - cannot grow</li>
+                        <li>No built-in methods for operations</li>
+                        <li>Manual index management</li>
+                        <li>Risk of ArrayIndexOutOfBounds</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Demo: Array Operations</label>
+                <div class="controls">
+                    <input type="text" id="arrayInput" placeholder="Enter resident name">
+                    <select id="arrayIndex">
+                        <option value="0">Apartment 0</option>
+                        <option value="1">Apartment 1</option>
+                        <option value="2">Apartment 2</option>
+                        <option value="3">Apartment 3</option>
+                        <option value="4">Apartment 4</option>
+                    </select>
+                    <button onclick="addToArray()">Move In</button>
+                    <button onclick="removeFromArray()">Move Out</button>
+                    <button onclick="clearArray()" class="clear-btn">Clear Building</button>
+                </div>
+                <div class="container-display" id="arrayDisplay">
+                    <div style="color: #666; font-style: italic;">Fixed size building with 5 apartments (indices 0-4)</div>
+                </div>
+                <div class="hint">Try adding residents to different apartments. Notice how the size never changes!</div>
+                <div id="arrayResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ArrayList Tab Content -->
+    <div id="ArrayListTab" class="main-tabcontent">
+        <h2>ArrayList - Dynamic Size Container</h2>
+
+        <div class="collection-section">
+            <h3>Understanding ArrayList</h3>
+            <div class="method-info">
+                <code>ArrayList&lt;String&gt; backpack = new ArrayList&lt;&gt;();</code> - Creates a dynamic list that can grow
+            </div>
+
+            <div class="scope-info">
+                <strong>Size:</strong> Dynamic - grows automatically<br>
+                <strong>Access:</strong> By index, plus many built-in methods<br>
+                <strong>Performance:</strong> Slightly slower than arrays, but more flexible
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🎒 Real-Life Analogy: Magic Backpack</div>
+                <p>Imagine an ArrayList as a <strong>magic backpack</strong> that automatically expands when you add more items. You can pack unlimited items, and the backpack gets bigger as needed. You can also easily remove items, and everything shifts to fill the gap. Items stay in the order you put them in, and you can access any item by its position.</p>
+                <p><strong>Key Point:</strong> The magic is in its flexibility - it grows and shrinks as needed!</p>
+            </div>
+
+            <div class="highlight">
+                <strong>When to Use:</strong> When you don't know the final size or need to frequently add/remove elements. Perfect for shopping lists, to-do items, or any dynamic collection.
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Dynamic size - grows automatically</li>
+                        <li>Rich set of built-in methods</li>
+                        <li>Maintains insertion order</li>
+                        <li>Easy to use and understand</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>Slightly slower than arrays</li>
+                        <li>Uses more memory</li>
+                        <li>Only works with objects (not primitives)</li>
+                        <li>Resizing can be expensive</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Demo: ArrayList Operations</label>
+                <div class="controls">
+                    <input type="text" id="arrayListInput" placeholder="Add item to backpack">
+                    <button onclick="addToArrayList()">Pack Item</button>
+                    <button onclick="removeFromArrayList()">Remove Last</button>
+                    <button onclick="clearArrayList()" class="clear-btn">Empty Backpack</button>
+                    <span class="size-counter" id="arrayListSize">Size: 0</span>
+                </div>
+                <div class="container-display" id="arrayListDisplay">
+                    <div style="color: #666; font-style: italic;">Your magic backpack - add unlimited items!</div>
+                </div>
+                <div class="hint">Notice how the backpack grows automatically as you add items!</div>
+                <div id="arrayListResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HashMap Tab Content -->
+    <div id="HashMapTab" class="main-tabcontent">
+        <h2>HashMap - Key-Value Storage</h2>
+
+        <div class="collection-section">
+            <h3>Understanding HashMap</h3>
+            <div class="method-info">
+                <code>HashMap&lt;String, String&gt; phoneBook = new HashMap&lt;&gt;();</code> - Creates a key-value mapping structure
+            </div>
+
+            <div class="scope-info">
+                <strong>Storage:</strong> Key-value pairs<br>
+                <strong>Access:</strong> By key (not index)<br>
+                <strong>Performance:</strong> Very fast lookups by key (O(1))
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">📞 Real-Life Analogy: Smart Address Book</div>
+                <p>Think of a HashMap as a <strong>smart address book</strong> where each person's name (key) is linked to their phone number (value). You don't need to flip through pages - just say the name, and you instantly get the phone number. Each name can only appear once, but if you add the same name again, it updates the phone number.</p>
+                <p><strong>Key Point:</strong> You find information by "what" (key), not "where" (position)!</p>
+            </div>
+
+            <div class="highlight">
+                <strong>When to Use:</strong> When you need to quickly find values using unique keys. Perfect for lookups like ID-to-Name, Country-to-Capital, or Username-to-Profile.
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Very fast key-based lookups</li>
+                        <li>No duplicate keys allowed</li>
+                        <li>Flexible key-value relationships</li>
+                        <li>Efficient for large datasets</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>No guaranteed order</li>
+                        <li>Cannot access by index</li>
+                        <li>Keys must be unique</li>
+                        <li>More memory overhead</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Demo: HashMap Operations</label>
+                <div class="controls">
+                    <input type="text" id="mapKey" placeholder="Name (key)">
+                    <input type="text" id="mapValue" placeholder="Phone (value)">
+                    <button onclick="addToMap()">Add Contact</button>
+                </div>
+                <div class="controls">
+                    <input type="text" id="searchKey" placeholder="Search by name">
+                    <button onclick="searchMap()">Find Number</button>
+                    <button onclick="clearMap()" class="clear-btn">Clear Book</button>
+                    <span class="size-counter" id="mapSize">Contacts: 0</span>
+                </div>
+                <div class="container-display" id="mapDisplay">
+                    <div style="color: #666; font-style: italic;">Add contacts with name as key and phone as value</div>
+                </div>
+                <div class="hint">Try adding the same name twice - notice how it updates the value!</div>
+                <div id="mapResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HashSet Tab Content -->
+    <div id="HashSetTab" class="main-tabcontent">
+        <h2>HashSet - Unique Collection</h2>
+
+        <div class="collection-section">
+            <h3>Understanding HashSet</h3>
+            <div class="method-info">
+                <code>HashSet&lt;String&gt; uniqueClub = new HashSet&lt;&gt;();</code> - Creates a collection that only stores unique items
+            </div>
+
+            <div class="scope-info">
+                <strong>Uniqueness:</strong> No duplicates allowed<br>
+                <strong>Order:</strong> No guaranteed order<br>
+                <strong>Performance:</strong> Very fast membership testing
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🏆 Real-Life Analogy: Exclusive Club Membership</div>
+                <p>Imagine a HashSet as an <strong>exclusive club membership list</strong>. Each person can only be a member once - no matter how many times they try to join, their name appears only once on the list. The club doesn't care about the order members joined, just whether someone is a member or not. It's perfect for tracking "who's in" without caring about duplicates.</p>
+                <p><strong>Key Point:</strong> It's all about uniqueness and quick membership checking!</p>
+            </div>
+
+            <div class="highlight">
+                <strong>When to Use:</strong> When you need to ensure uniqueness and quickly check if an item exists. Perfect for unique IDs, visited pages, or removing duplicates from data.
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Automatic duplicate prevention</li>
+                        <li>Very fast membership testing</li>
+                        <li>Efficient for uniqueness checks</li>
+                        <li>Simple to use</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>No guaranteed order</li>
+                        <li>Cannot access by index</li>
+                        <li>Cannot store duplicates (limitation/feature)</li>
+                        <li>No direct element retrieval</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Demo: HashSet Operations</label>
+                <div class="controls">
+                    <input type="text" id="setInput" placeholder="Add member name">
+                    <button onclick="addToSet()">Join Club</button>
+                    <button onclick="clearSet()" class="clear-btn">Clear Members</button>
+                    <span class="size-counter" id="setSize">Members: 0</span>
+                </div>
+                <div class="container-display" id="setDisplay">
+                    <div style="color: #666; font-style: italic;">Try adding the same name twice - duplicates will be rejected!</div>
+                </div>
+                <div class="hint">Notice how adding the same member multiple times doesn't increase the size!</div>
+                <div id="setResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Tab Content -->
+    <div id="ComparisonTab" class="main-tabcontent">
+        <h2>Collection Comparison - When to Use Which?</h2>
+
+        <div class="collection-section">
+            <h3>Quick Decision Guide</h3>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3>📦 Use Array When:</h3>
+                    <ul>
+                        <li>Size is known and fixed</li>
+                        <li>Need fastest possible access</li>
+                        <li>Working with primitive types</li>
+                        <li>Memory is a concern</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>Example:</strong> Days of the week, chess board positions
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>🎒 Use ArrayList When:</h3>
+                    <ul>
+                        <li>Size may change frequently</li>
+                        <li>Need ordered collection</li>
+                        <li>Frequent additions/removals</li>
+                        <li>Need rich API methods</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>Example:</strong> Shopping list, to-do tasks, test steps
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>📞 Use HashMap When:</h3>
+                    <ul>
+                        <li>Need key-value relationships</li>
+                        <li>Fast lookups by key required</li>
+                        <li>Each key should be unique</li>
+                        <li>Don't care about order</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>Example:</strong> ID to Name, Country to Capital, Cache storage
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>🏆 Use HashSet When:</h3>
+                    <ul>
+                        <li>Need unique items only</li>
+                        <li>Order doesn't matter</li>
+                        <li>Fast membership testing</li>
+                        <li>Removing duplicates</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>Example:</strong> Unique visitor IDs, tags, categories
+                    </div>
+                </div>
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">🎯 Real-World Scenario: Building a Library System</div>
+                <p><strong>Array:</strong> Fixed categories ["Fiction", "Non-Fiction", "Science", "History"]</p>
+                <p><strong>ArrayList:</strong> Dynamic list of books in each category</p>
+                <p><strong>HashMap:</strong> Map book ISBN to book details for quick lookup</p>
+                <p><strong>HashSet:</strong> Track unique borrowed book ISBNs (no duplicate borrowing)</p>
+            </div>
+
+            <div class="method-info">
+                <strong>Performance Comparison:</strong><br>
+                • <strong>Access by index:</strong> Array > ArrayList >> HashMap/HashSet (N/A)<br>
+                • <strong>Search by value:</strong> HashSet/HashMap > ArrayList > Array<br>
+                • <strong>Add/Remove:</strong> HashSet/HashMap > ArrayList > Array<br>
+                • <strong>Memory usage:</strong> Array < ArrayList < HashMap/HashSet
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Java Collections Interactive Practice Page</p>
+        <p>Created for educational purposes - Master Collections, Master Selenium!</p>
+    </footer>
+
+    <script>
+        // Function to handle switching between main tabs
+        function openMainTab(event, tabName) {
+            const mainTabContents = document.getElementsByClassName("main-tabcontent");
+            for (let i = 0; i < mainTabContents.length; i++) {
+                mainTabContents[i].style.display = "none";
+            }
+
+            const mainTabLinks = document.getElementsByClassName("main-tablinks");
+            for (let i = 0; i < mainTabLinks.length; i++) {
+                mainTabLinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            event.currentTarget.classList.add("active");
+        }
+
+        // Array implementation
+        const apartments = new Array(5);
+        
+        function addToArray() {
+            const input = document.getElementById('arrayInput');
+            const index = document.getElementById('arrayIndex').value;
+            const name = input.value.trim();
+            
+            if (!name) {
+                showResult('arrayResult', 'Please enter a resident name!', 'error');
+                return;
+            }
+            
+            apartments[index] = name;
+            input.value = '';
+            displayArray();
+            showResult('arrayResult', `Added "${name}" to apartment ${index}`, 'success');
+        }
+        
+        function removeFromArray() {
+            const index = document.getElementById('arrayIndex').value;
+            const removed = apartments[index];
+            apartments[index] = undefined;
+            displayArray();
+            
+            if (removed) {
+                showResult('arrayResult', `Removed "${removed}" from apartment ${index}`, 'info');
+            } else {
+                showResult('arrayResult', `Apartment ${index} was already empty`, 'info');
+            }
+        }
+        
+        function clearArray() {
+            for (let i = 0; i < apartments.length; i++) {
+                apartments[i] = undefined;
+            }
+            displayArray();
+            showResult('arrayResult', 'All apartments cleared!', 'info');
+        }
+        
+        function displayArray() {
+            const display = document.getElementById('arrayDisplay');
+            display.innerHTML = '';
+            
+            for (let i = 0; i < apartments.length; i++) {
+                const apartment = document.createElement('div');
+                apartment.className = 'item';
+                apartment.innerHTML = `<div class="index-label">${i}</div>${apartments[i] || 'Empty'}`;
+                if (!apartments[i]) {
+                    apartment.style.background = '#6c757d';
+                    apartment.style.opacity = '0.6';
+                }
+                display.appendChild(apartment);
+            }
+        }
+        
+        // ArrayList implementation
+        const backpack = [];
+        
+        function addToArrayList() {
+            const input = document.getElementById('arrayListInput');
+            const item = input.value.trim();
+            
+            if (!item) {
+                showResult('arrayListResult', 'Please enter an item!', 'error');
+                return;
+            }
+            
+            backpack.push(item);
+            input.value = '';
+            displayArrayList();
+            showResult('arrayListResult', `Packed "${item}" - Backpack size is now ${backpack.length}`, 'success');
+        }
+        
+        function removeFromArrayList() {
+            const removed = backpack.pop();
+            displayArrayList();
+            
+            if (removed) {
+                showResult('arrayListResult', `Removed "${removed}" from backpack`, 'info');
+            } else {
+                showResult('arrayListResult', 'Backpack is already empty!', 'info');
+            }
+        }
+        
+        function clearArrayList() {
+            backpack.length = 0;
+            displayArrayList();
+            showResult('arrayListResult', 'Backpack emptied!', 'info');
+        }
+        
+        function displayArrayList() {
+            const display = document.getElementById('arrayListDisplay');
+            const sizeDisplay = document.getElementById('arrayListSize');
+            
+            display.innerHTML = '';
+            sizeDisplay.textContent = `Size: ${backpack.length}`;
+            
+            if (backpack.length === 0) {
+                display.innerHTML = '<div style="color: #666; font-style: italic;">Your backpack is empty</div>';
+                return;
+            }
+            
+            backpack.forEach((item, index) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'item';
+                itemEl.innerHTML = `<div class="index-label">${index}</div>${item}`;
+                display.appendChild(itemEl);
+            });
+        }
+        
+        // Map implementation
+        const addressBook = new Map();
+        
+        function addToMap() {
+            const keyInput = document.getElementById('mapKey');
+            const valueInput = document.getElementById('mapValue');
+            const key = keyInput.value.trim();
+            const value = valueInput.value.trim();
+            
+            if (!key || !value) {
+                showResult('mapResult', 'Please enter both name and phone number!', 'error');
+                return;
+            }
+            
+            const wasUpdate = addressBook.has(key);
+            addressBook.set(key, value);
+            
+            keyInput.value = '';
+            valueInput.value = '';
+            displayMap();
+            
+            if (wasUpdate) {
+                showResult('mapResult', `Updated: ${key}'s number changed to ${value}`, 'info');
+            } else {
+                showResult('mapResult', `Added: ${key} → ${value}`, 'success');
+            }
+        }
+        
+        function searchMap() {
+            const searchInput = document.getElementById('searchKey');
+            const key = searchInput.value.trim();
+            
+            if (!key) {
+                showResult('mapResult', 'Please enter a name to search!', 'error');
+                return;
+            }
+            
+            if (addressBook.has(key)) {
+                showResult('mapResult', `📞 Found: ${key}'s number is ${addressBook.get(key)}`, 'success');
+            } else {
+                showResult('mapResult', `❌ Not Found: ${key} is not in your address book`, 'error');
+            }
+            
+            searchInput.value = '';
+        }
+        
+        function clearMap() {
+            addressBook.clear();
+            displayMap();
+            showResult('mapResult', 'Address book cleared!', 'info');
+        }
+        
+        function displayMap() {
+            const display = document.getElementById('mapDisplay');
+            const sizeDisplay = document.getElementById('mapSize');
+            
+            display.innerHTML = '';
+            sizeDisplay.textContent = `Contacts: ${addressBook.size}`;
+            
+            if (addressBook.size === 0) {
+                display.innerHTML = '<div style="color: #666; font-style: italic;">Your address book is empty</div>';
+                return;
+            }
+            
+            addressBook.forEach((value, key) => {
+                const item = document.createElement('div');
+                item.className = 'map-item';
+                item.innerHTML = `<span class="map-key">${key}</span> ➜ ${value}`;
+                display.appendChild(item);
+            });
+        }
+        
+        // Set implementation
+        const uniqueClub = new Set();
+        
+        function addToSet() {
+            const input = document.getElementById('setInput');
+            const member = input.value.trim();
+            
+            if (!member) {
+                showResult('setResult', 'Please enter a member name!', 'error');
+                return;
+            }
+            
+            const sizeBefore = uniqueClub.size;
+            uniqueClub.add(member);
+            const sizeAfter = uniqueClub.size;
+            
+            input.value = '';
+            displaySet();
+            
+            if (sizeBefore === sizeAfter) {
+                showResult('setResult', `🚫 Duplicate Rejected: ${member} is already a member!`, 'error');
+            } else {
+                showResult('setResult', `✅ Welcome: ${member} joined the club!`, 'success');
+            }
+        }
+        
+        function clearSet() {
+            uniqueClub.clear();
+            displaySet();
+            showResult('setResult', 'All members removed from club!', 'info');
+        }
+        
+        function displaySet() {
+            const display = document.getElementById('setDisplay');
+            const sizeDisplay = document.getElementById('setSize');
+            
+            display.innerHTML = '';
+            sizeDisplay.textContent = `Members: ${uniqueClub.size}`;
+            
+            if (uniqueClub.size === 0) {
+                display.innerHTML = '<div style="color: #666; font-style: italic;">No members in the club yet</div>';
+                return;
+            }
+            
+            uniqueClub.forEach(member => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.style.background = '#6f42c1';
+                item.textContent = member;
+                display.appendChild(item);
+            });
+        }
+        
+        // Utility function to show results
+        function showResult(elementId, message, type) {
+            const resultEl = document.getElementById(elementId);
+            resultEl.style.display = 'block';
+            resultEl.innerHTML = message;
+            
+            // Color coding based on type
+            switch(type) {
+                case 'success':
+                    resultEl.style.background = '#d4edda';
+                    resultEl.style.color = '#155724';
+                    resultEl.style.borderColor = '#c3e6cb';
+                    break;
+                case 'error':
+                    resultEl.style.background = '#f8d7da';
+                    resultEl.style.color = '#721c24';
+                    resultEl.style.borderColor = '#f5c6cb';
+                    break;
+                case 'info':
+                    resultEl.style.background = '#d1ecf1';
+                    resultEl.style.color = '#0c5460';
+                    resultEl.style.borderColor = '#bee5eb';
+                    break;
+                default:
+                    resultEl.style.background = '#faeaff';
+                    resultEl.style.color = '#333';
+                    resultEl.style.borderColor = '#e270e2';
+            }
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                resultEl.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Initialize displays
+        displayArray();
+        displayArrayList();
+        displayMap();
+        displaySet();
+        
+        // Add Enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'arrayInput') addToArray();
+                else if (activeElement.id === 'arrayListInput') addToArrayList();
+                else if (activeElement.id === 'mapValue') addToMap();
+                else if (activeElement.id === 'searchKey') searchMap();
+                else if (activeElement.id === 'setInput') addToSet();
+            }
+        });
+    </script>
+</body>
+</html>
