@@ -359,6 +359,46 @@
             opacity: 1;
         }
 
+        .api-result {
+            background-color: #faeaff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border: 1px solid #e270e2;
+            min-height: 50px;
+        }
+
+        .api-success {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+        }
+
+        .api-error {
+            background-color: #f8e8e8;
+            border-left: 4px solid #dc3545;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #c20cc2;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         @media (max-width: 768px) {
             .pros-cons {
                 grid-template-columns: 1fr;
@@ -371,9 +411,12 @@
     <h1>Selenium Synchronization & Wait Strategies Practice Page</h1>
 
     <div class="main-tabs">
-        <button class="main-tablinks active" onclick="openMainTab(event, 'ImplicitWaitTab')">Implicit Wait</button>
-        <button class="main-tablinks" onclick="openMainTab(event, 'ExplicitWaitTab')">Explicit Wait</button>
-        <button class="main-tablinks" onclick="openMainTab(event, 'FluentWaitTab')">Fluent Wait</button>
+        <button id="ImplicitWaitTabBtn" class="main-tablinks active"
+            onclick="openMainTab(event, 'ImplicitWaitTab')">Implicit Wait</button>
+        <button id="ExplicitWaitTabBtn" class="main-tablinks" onclick="openMainTab(event, 'ExplicitWaitTab')">Explicit
+            Wait</button>
+        <button id="FluentWaitTabBtn" class="main-tablinks" onclick="openMainTab(event, 'FluentWaitTab')">Fluent
+            Wait</button>
     </div>
 
     <!-- Implicit Wait Tab Content -->
@@ -408,21 +451,6 @@
                 <strong>When to Use:</strong> When your entire application generally takes the same amount of time to
                 load elements, and you want a simple, one-time setup.
             </div>
-            <!-- 
-            <div class="code-block">
-// Setting up Implicit Wait - like setting your "patience level" for the entire test
-WebDriver driver = new ChromeDriver();
-
-// This is like saying: "For my entire shopping trip, I'll wait up to 10 seconds for any elevator"
-driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
-// Now every time you look for an element, Selenium will wait up to 10 seconds
-WebElement loginButton = driver.findElement(By.id("login-btn"));
-WebElement username = driver.findElement(By.name("username"));
-WebElement password = driver.findElement(By.name("password"));
-
-// All the above elements will have the same 10-second waiting patience
-            </div> -->
 
             <div class="pros-cons">
                 <div class="pros">
@@ -471,37 +499,21 @@ WebElement password = driver.findElement(By.name("password"));
             </div>
 
             <div class="analogy-box">
-                <div class="analogy-title">🍕 Real-Life Analogy: Pizza Delivery</div>
-                <p>You order a pizza and the restaurant says: <strong>"Your pizza will be ready when the oven timer
-                        beeps AND the cheese is perfectly melted."</strong> You're not just waiting for time to pass -
-                    you're waiting for specific conditions to be met. You might check every 30 seconds, but you only
-                    stop waiting when you see that perfect, bubbly cheese!</p>
-                <p><strong>Key Point:</strong> You're waiting for a SPECIFIC condition, not just time. And you can have
-                    different conditions for different orders.</p>
+                <div class="analogy-title">👤 Real-Life Analogy: Getting User Profile Data</div>
+                <p>You're waiting for someone to create their profile online. You keep checking <strong>"Is their
+                        profile
+                        complete with name, email, and photo?"</strong> You're not just waiting for time to pass -
+                    you're
+                    waiting for specific profile data to be available. You check every few seconds until you see all
+                    the required information is there!</p>
+                <p><strong>Key Point:</strong> You're waiting for SPECIFIC data to appear, not just any element. Perfect
+                    for dynamic content loaded via APIs.</p>
             </div>
 
             <div class="highlight">
                 <strong>When to Use:</strong> When you need to wait for specific conditions like element visibility,
                 clickability, or text changes. Perfect for dynamic content and AJAX applications.
             </div>
-
-            <!-- <div class="code-block">
-                // Setting up Explicit Wait - like having a smart waiter who knows exactly what to look for
-                WebDriver driver = new ChromeDriver();
-                WebDriverWait wait = new WebDriverWait(driver, 20); // Maximum 20 seconds to wait
-
-                // Wait for login button to be clickable (like waiting for pizza to be ready to eat)
-                WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("login-btn")));
-
-                // Wait for welcome message to be visible (like waiting for "Order Ready" sign)
-                WebElement welcomeMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("welcome")));
-
-                // Wait for specific text to appear (like waiting for "Your pizza is ready!" message)
-                wait.until(ExpectedConditions.textToBe(By.id("status"), "Login Successful"));
-
-                // Wait for element to disappear (like waiting for loading spinner to vanish)
-                wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loading-spinner")));
-            </div> -->
 
             <div class="method-info">
                 <strong>Common ExpectedConditions:</strong><br>
@@ -534,11 +546,11 @@ WebElement password = driver.findElement(By.name("password"));
             </div>
 
             <div class="form-group">
-                <label>Demo: Explicit Wait Simulation</label>
-                <button class="demo-button" onclick="simulateExplicitWait()">Simulate Explicit Wait (Waiting for element
-                    to be visible)</button>
-                <div id="explicit-result" class="result"></div>
-                <div class="slow-element" id="explicit-element">I'm the element Explicit Wait is looking for!</div>
+                <label>Demo: Explicit Wait with Real Random User API</label>
+                <button class="demo-button" onclick="simulateExplicitWait()">Simulate Explicit Wait</button>
+                <div id="explicit-element" class="api-result">
+                    Click the button to fetch random user data and practice explicit wait conditions...
+                </div>
             </div>
         </div>
     </div>
@@ -562,45 +574,22 @@ WebElement password = driver.findElement(By.name("password"));
             </div>
 
             <div class="analogy-box">
-                <div class="analogy-title">🎣 Real-Life Analogy: Fishing with Patience</div>
-                <p>You go fishing and decide: <strong>"I'll fish for up to 2 hours, checking my line every 10 seconds.
-                        If I catch a small fish (which I don't want), I'll ignore it and keep waiting for a big fish.
-                        But if there's a storm (exception), I'll ignore that too and keep fishing."</strong></p>
+                <div class="analogy-title">📚 Real-Life Analogy: Collecting Random Quotes</div>
+                <p>You're building a collection of inspirational quotes from different sources. You decide:
+                    <strong>"I'll
+                        spend up to 2 minutes collecting quotes, checking each source every 10 seconds. If one source is
+                        temporarily down (error), I'll ignore it and keep trying. But I need at least 3 good quotes
+                        before
+                        I'm satisfied."</strong>
+                </p>
                 <p><strong>Key Point:</strong> You have total control over timing, checking frequency, and what
-                    exceptions to ignore while waiting for your specific goal.</p>
+                    failures to ignore while collecting exactly what you need.</p>
             </div>
 
             <div class="highlight">
                 <strong>When to Use:</strong> When you need maximum control over waiting behavior, especially in
                 applications with unpredictable loading times or when you need to ignore specific exceptions.
             </div>
-            <!-- 
-            <div class="code-block">
-                // Setting up Fluent Wait - like being a patient, smart fisherman
-                WebDriver driver = new ChromeDriver();
-
-                FluentWait&lt;WebDriver&gt; fluentWait = new FluentWait&lt;&gt;(driver)
-                .withTimeout(Duration.ofSeconds(30)) // Fish for maximum 30 seconds
-                .pollingEvery(Duration.ofSeconds(2)) // Check the line every 2 seconds
-                .ignoring(NoSuchElementException.class) // Ignore if element not found yet
-                .ignoring(StaleElementReferenceException.class); // Ignore stale element errors
-
-                // Wait for element to be clickable (like waiting for the perfect fish)
-                WebElement submitButton = fluentWait.until(new Function&lt;WebDriver, WebElement&gt;() {
-                public WebElement apply(WebDriver driver) {
-                WebElement element = driver.findElement(By.id("submit-btn"));
-                if (element.isEnabled() && element.isDisplayed()) {
-                return element; // Found our perfect fish!
-                }
-                return null; // Keep fishing...
-                }
-                });
-
-                // You can also use it with ExpectedConditions
-                WebElement loginButton = fluentWait.until(
-                ExpectedConditions.elementToBeClickable(By.id("login-btn"))
-                );
-            </div> -->
 
             <div class="method-info">
                 <strong>Fluent Wait Configuration Options:</strong><br>
@@ -633,10 +622,11 @@ WebElement password = driver.findElement(By.name("password"));
             </div>
 
             <div class="form-group">
-                <label>Demo: Fluent Wait Simulation</label>
-                <button class="demo-button" onclick="simulateFluentWait()">Simulate Fluent Wait (Check every 1s for
-                    10s)</button>
-                <div id="fluent-result" class="result"></div>
+                <label>Demo: Fluent Wait with Multiple Quote APIs</label>
+                <button class="demo-button" onclick="simulateFluentWait()">Simulate Fluent Wait</button>
+                <div id="fluent-result" class="api-result">
+                    Click the button to start collecting quotes with custom polling...
+                </div>
                 <div id="fluent-status" class="result"></div>
             </div>
         </div>
@@ -689,31 +679,53 @@ WebElement password = driver.findElement(By.name("password"));
             }, findTime);
         }
 
-        function simulateExplicitWait() {
-            const resultDiv = document.getElementById('explicit-result');
-            const element = document.getElementById('explicit-element');
+        async function simulateExplicitWait() {
+            const resultDiv = document.getElementById('explicit-element');
             const button = event.target;
 
             button.disabled = true;
             button.textContent = 'Waiting for condition...';
-            element.classList.remove('show');
 
-            resultDiv.innerHTML = '<p style="color: #ffc107;">⏳ Explicit Wait: Waiting for element to become visible...</p>';
-            resultDiv.id = "changingText"
+            resultDiv.innerHTML = '<div class="spinner"></div><p style="color: #ffc107;">⏳ Explicit Wait: Fetching random user data from API...</p>';
+            resultDiv.className = 'api-result';
 
-            // Show element after 3 seconds
-            setTimeout(() => {
-                element.classList.add('show');
+            try {
+                // Fetch from Random User API
+                const response = await fetch('https://randomuser.me/api/');
+                const data = await response.json();
+                const user = data.results[0];
+
+                // Add realistic delay to simulate network/processing time
+                await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1500));
+
                 resultDiv.innerHTML = `
-                    <p style="color: #28a745;">✅ Condition met! Element is now visible.</p>
-                    <p style="color: #6c757d;">Explicit wait stopped as soon as the condition was satisfied.</p>
+                    <div class="api-success">
+                        <h4 style="color: #28a745;">✅ Condition met! User data retrieved successfully.</h4>
+                        <p><strong>Name:</strong> ${user.name.first} ${user.name.last}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Location:</strong> ${user.location.city}, ${user.location.country}</p>
+                        <p><strong>Age:</strong> ${user.dob.age} years old</p>
+                        <small style="color: #6c757d;">Explicit wait stopped as soon as the user data was loaded and visible.</small>
+                    </div>
                 `;
+                resultDiv.className = 'api-result api-success';
+
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="api-error">
+                        <h4 style="color: #dc3545;">❌ API call failed</h4>
+                        <p>Error: ${error.message}</p>
+                        <small style="color: #6c757d;">Explicit wait would timeout after specified duration.</small>
+                    </div>
+                `;
+                resultDiv.className = 'api-result api-error';
+            } finally {
                 button.disabled = false;
-                button.textContent = 'Simulate Explicit Wait (Waiting for element to be visible)';
-            }, 3000);
+                button.textContent = 'Simulate Explicit Wait';
+            }
         }
 
-        function simulateFluentWait() {
+        async function simulateFluentWait() {
             const resultDiv = document.getElementById('fluent-result');
             const statusDiv = document.getElementById('fluent-status');
             const button = event.target;
@@ -721,37 +733,106 @@ WebElement password = driver.findElement(By.name("password"));
             button.disabled = true;
             button.textContent = 'Fluent Wait in progress...';
 
-            resultDiv.innerHTML = '<p style="color: #ffc107;">⏳ Fluent Wait: Checking condition every 1 second for up to 10 seconds...</p>';
+            resultDiv.innerHTML = '<div class="spinner"></div><p style="color: #ffc107;">⏳ Fluent Wait: Collecting quotes with custom polling...</p>';
+            statusDiv.innerHTML = '';
 
+            const quotes = [];
             let attempts = 0;
-            const maxAttempts = 10;
-            const checkInterval = 1000;
+            const maxAttempts = 8;
+            const targetQuotes = 3;
 
-            const interval = setInterval(() => {
+            // Quote APIs (all free, no key required)
+            const quoteAPIs = [
+                'https://api.quotable.io/random',
+                'https://zenquotes.io/api/random',
+                'https://api.adviceslip.com/advice'
+            ];
+
+            const pollForQuotes = async () => {
                 attempts++;
-                statusDiv.innerHTML = `<p style="color: #17a2b8;">🔍 Polling attempt ${attempts}/${maxAttempts}...</p>`;
+                statusDiv.innerHTML = `<p style="color: #17a2b8;">🔍 Polling attempt ${attempts}/${maxAttempts} - Collected ${quotes.length}/${targetQuotes} quotes</p>`;
 
-                // Simulate success after 6 attempts
-                if (attempts === 6) {
-                    clearInterval(interval);
-                    resultDiv.innerHTML = `
-                        <p style="color: #28a745;">✅ Condition satisfied after ${attempts} polling attempts!</p>
-                        <p style="color: #6c757d;">Fluent wait found the element with custom polling frequency.</p>
-                    `;
-                    statusDiv.innerHTML = '';
-                    button.disabled = false;
-                    button.textContent = 'Simulate Fluent Wait (Check every 1s for 10s)';
-                } else if (attempts >= maxAttempts) {
-                    clearInterval(interval);
-                    resultDiv.innerHTML = `
-                        <p style="color: #dc3545;">❌ Timeout! Condition not met after ${maxAttempts} seconds.</p>
-                        <p style="color: #6c757d;">Fluent wait exhausted all polling attempts.</p>
-                    `;
-                    statusDiv.innerHTML = '';
-                    button.disabled = false;
-                    button.textContent = 'Simulate Fluent Wait (Check every 1s for 10s)';
+                try {
+                    // Randomly select an API
+                    const apiIndex = Math.floor(Math.random() * quoteAPIs.length);
+                    const apiUrl = quoteAPIs[apiIndex];
+
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+
+                    let quoteText = '';
+                    let author = '';
+
+                    // Handle different API response formats
+                    if (apiUrl.includes('quotable.io')) {
+                        quoteText = data.content;
+                        author = data.author;
+                    } else if (apiUrl.includes('zenquotes.io')) {
+                        quoteText = data[0].q;
+                        author = data[0].a;
+                    } else if (apiUrl.includes('adviceslip.com')) {
+                        quoteText = data.slip.advice;
+                        author = 'Anonymous';
+                    }
+
+                    quotes.push({ text: quoteText, author: author, source: apiIndex + 1 });
+
+                    // Check if we have enough quotes (success condition)
+                    if (quotes.length >= targetQuotes) {
+                        resultDiv.innerHTML = `
+                            <div class="api-success">
+                                <h4 style="color: #28a745;">🎉 Condition satisfied! Collected ${quotes.length} quotes after ${attempts} polling attempts.</h4>
+                                ${quotes.map((quote, index) =>
+                            `<p><strong>Quote ${index + 1}:</strong> "${quote.text}" - <em>${quote.author}</em> (Source API ${quote.source})</p>`
+                        ).join('')}
+                                <small style="color: #6c757d;">Fluent wait successfully collected quotes with custom polling frequency.</small>
+                            </div>
+                        `;
+                        resultDiv.className = 'api-result api-success';
+                        statusDiv.innerHTML = '';
+                        button.disabled = false;
+                        button.textContent = 'Simulate Fluent Wait';
+                        return;
+                    }
+
+                } catch (error) {
+                    console.log(`API call failed on attempt ${attempts}: ${error.message}`);
+                    // Fluent wait ignores exceptions and continues polling
                 }
-            }, checkInterval);
+
+                // Continue polling if we haven't reached max attempts and don't have enough quotes
+                if (attempts < maxAttempts) {
+                    setTimeout(pollForQuotes, 1500); // Poll every 1.5 seconds
+                } else {
+                    // Timeout reached
+                    if (quotes.length > 0) {
+                        resultDiv.innerHTML = `
+                            <div class="api-result">
+                                <h4 style="color: #ffc107;">⚠️ Partial success! Collected ${quotes.length}/${targetQuotes} quotes after ${maxAttempts} attempts.</h4>
+                                ${quotes.map((quote, index) =>
+                            `<p><strong>Quote ${index + 1}:</strong> "${quote.text}" - <em>${quote.author}</em></p>`
+                        ).join('')}
+                                <small style="color: #6c757d;">Fluent wait timeout reached but some data was collected.</small>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="api-error">
+                                <h4 style="color: #dc3545;">❌ Timeout! No quotes collected after ${maxAttempts} polling attempts.</h4>
+                                <p>All API calls failed or timed out.</p>
+                                <small style="color: #6c757d;">Fluent wait exhausted all polling attempts.</small>
+                            </div>
+                        `;
+                        resultDiv.className = 'api-result api-error';
+                    }
+                    statusDiv.innerHTML = '';
+                    button.disabled = false;
+                    button.textContent = 'Simulate Fluent Wait';
+                }
+            };
+
+            // Start polling
+            pollForQuotes();
         }
     </script>
 </body>
