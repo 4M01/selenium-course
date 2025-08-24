@@ -699,6 +699,7 @@ WebElement password = driver.findElement(By.name("password"));
             element.classList.remove('show');
 
             resultDiv.innerHTML = '<p style="color: #ffc107;">⏳ Explicit Wait: Waiting for element to become visible...</p>';
+            resultDiv.id = "changingText"
 
             // Show element after 3 seconds
             setTimeout(() => {
