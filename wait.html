@@ -578,8 +578,12 @@
         <div class="method-section">
             <h3>Understanding Fluent Wait</h3>
             <div class="method-info">
-                <code>FluentWait&lt;WebDriver&gt; fluentWait = new FluentWait&lt;&gt;(driver)</code><br>
-                <code>.withTimeout(Duration.ofSeconds(30)).pollingEvery(Duration.ofSeconds(2));</code>
+                <code>FluentWait&lt;WebDriver&gt; wait = new FluentWait&lt;&gt;(driver);  </code><br>
+                <code>      wait</code><br>
+                <code>              .withTimeout(Duration.ofSeconds(2000))</code><br>
+                <code>              .pollingEvery(Duration.ofMillis(2000))</code><br>
+                <code>  .ignoring(TimeoutException.class);</code>
+
             </div>
 
             <div class="scope-info">
