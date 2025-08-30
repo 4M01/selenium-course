@@ -52,6 +52,7 @@
 
         input[type="text"],
         input[type="email"],
+        input[type="number"],
         textarea,
         select {
             width: 100%;
@@ -64,6 +65,7 @@
 
         input[type="text"]:focus,
         input[type="email"]:focus,
+        input[type="number"]:focus,
         textarea:focus,
         select:focus {
             outline: none;
@@ -553,6 +555,19 @@
                     Click the button to fetch random user data and practice explicit wait conditions...
                 </div>
             </div>
+
+            <!-- NEW: Explicit Wait vs Quote API (single-source brittleness) -->
+            <!-- <div class="form-group">
+                <label>Demo: Why Explicit Wait struggles with flaky quote APIs (single source)</label>
+                <button id="explicit-quote-button" class="demo-button"
+                    onclick="simulateExplicitQuoteWait()">Single‑source Quote (Explicit Wait)</button>
+                <div id="explicit-quote-result" class="api-result">
+                    This demo calls one quote API and waits for a single condition: “text appears”. If that API hiccups
+                    or is slow, the explicit wait times out.
+                </div>
+                <div class="hint">Tip: Compare this with the Fluent Wait tab, which polls multiple sources and ignores
+                    transient errors until a <em>collection</em> goal is met.</div>
+            </div> -->
         </div>
     </div>
 
@@ -622,19 +637,60 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Demo: Fluent Wait with Multiple Quote APIs</label>
-                <button class="demo-button" onclick="simulateFluentWait()">Simulate Fluent Wait</button>
-                <div id="fluent-result" class="api-result">
-                    Click the button to start collecting quotes with custom polling...
+            <div class="method-section">
+                <h3>Single Scenario: proceed with checkout even if the API-backed element misbehaves</h3>
+                <div class="highlight">
+                    The “Address Widget” below appears only if an API returns data. With a classic explicit wait, a
+                    failure
+                    blocks the flow.
+                    With a fluent wait, we poll, ignore transient errors, and—even if the API never recovers—gracefully
+                    fall
+                    back to a manual form so the flow continues.
                 </div>
-                <div id="fluent-status" class="result"></div>
+
+                <div class="form-group stack">
+                    <div>
+                        <label for="pollMs">Polling interval (ms)</label>
+                        <input id="pollMs" type="number" min="200" step="100" value="1200" />
+                    </div>
+                    <div>
+                        <label for="maxAttempts">Max attempts</label>
+                        <input id="maxAttempts" type="number" min="1" step="1" value="6" />
+                    </div>
+                    <div class="hint">These mirror <code>pollingEvery()</code> and total timeout in FluentWait.</div>
+                </div>
+
+                <div class="form-group">
+                    <button class="demo-button" id="btn-explicit" onclick="runExplicitScenario()">Run with Explicit Wait
+                        (may block)</button>
+                    <button class="demo-button" id="btn-fluent" onclick="runFluentScenario()">Run with Fluent Wait (poll
+                        +
+                        fallback)</button>
+                    <button class="demo-button ghost" id="btn-reset" onclick="resetScenario()">Reset</button>
+                </div>
+
+                <div id="scenario-status" class="result">Status: idle</div>
+
+                <div id="address-container" class="api-result">
+                    Address Widget area (appears only if API responds)
+                </div>
+
+                <div class="form-group">
+                    <button id="continue-btn" class="demo-button" disabled>Continue to Payment</button>
+                    <span id="flow-badge" class="warn-badge">Blocked</span>
+                </div>
+
+                <div class="hint">Teaching purpose: in Selenium, <code>WebDriverWait</code> would wait for “address
+                    widget
+                    visible”. If it never appears, the test stops. <code>FluentWait</code> lets you poll + ignore
+                    <em>exceptions</em> and even proceed via an alternate path.
+                </div>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2023 Selenium Synchronization & Wait Strategies Practice Page</p>
+        <p>&copy; 2025 Selenium Synchronization & Wait Strategies Practice Page</p>
         <p>Created for educational purposes. <a href="https://www.selenium.dev/">Selenium Documentation</a></p>
     </footer>
 
@@ -726,6 +782,56 @@
             }
         }
 
+        // NEW: Single-source explicit wait for a quote (demonstrates brittleness)
+        async function simulateExplicitQuoteWait() {
+            const resultDiv = document.getElementById('explicit-quote-result');
+            const button = document.getElementById('explicit-quote-button');
+            button.disabled = true;
+            button.textContent = 'Waiting on single quote source...';
+            resultDiv.innerHTML = '<div class="spinner"></div><p style="color: #ffc107;">⏳ Explicit Wait: Asking one quote API for a quote...</p>';
+            resultDiv.className = 'api-result';
+
+            // Choose exactly ONE source, and purposely make it flaky to mimic real-world outages
+            const realEndpoint = 'https://api.quotable.io/random';
+            const badEndpoint = 'https://api.quotable.io/ran' + 'dom-broken'; // guaranteed to fail
+            const endpoint = Math.random() < 0.4 ? badEndpoint : realEndpoint; // ~40% failure rate
+
+            // "Explicit wait" style: one condition, one source, fixed timeout
+            const timeoutMs = 3000;
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+            try {
+                const resp = await fetch(endpoint, { signal: controller.signal });
+                clearTimeout(timer);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const data = await resp.json();
+                const text = data.content || (data.slip && data.slip.advice) || JSON.stringify(data);
+
+                resultDiv.innerHTML = `
+                    <div class="api-success">
+                        <h4 style="color: #28a745;">✅ Condition met (single source)</h4>
+                        <p><strong>Quote:</strong> “${text}”</p>
+                        <small style="color: #6c757d;">Explicit wait succeeded because the only source responded in time.</small>
+                    </div>
+                `;
+                resultDiv.className = 'api-result api-success';
+            } catch (err) {
+                clearTimeout(timer);
+                resultDiv.innerHTML = `
+                    <div class="api-error">
+                        <h4 style="color: #dc3545;">❌ Timeout/Failure (single source)</h4>
+                        <p>Reason: ${err.name === 'AbortError' ? 'Request timed out at ' + (timeoutMs / 1000) + 's.' : err.message}</p>
+                        <small style="color: #6c757d;">This is the limitation of explicit wait here: one source, one condition. If that source hiccups, you lose.</small>
+                    </div>
+                `;
+                resultDiv.className = 'api-result api-error';
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Single‑source Quote (Explicit Wait)';
+            }
+        }
+
         async function simulateFluentWait() {
             const resultDiv = document.getElementById('fluent-result');
             const statusDiv = document.getElementById('fluent-status');
@@ -739,8 +845,15 @@
 
             const quotes = [];
             let attempts = 0;
-            const maxAttempts = 8;
-            const targetQuotes = 3;
+
+            // Read controls
+            const pollMsInput = document.getElementById('pollMs');
+            const targetQuotesInput = document.getElementById('targetQuotes');
+            const maxAttemptsInput = document.getElementById('maxAttempts');
+
+            const pollMs = Math.max(200, parseInt(pollMsInput ? pollMsInput.value : '1500', 10) || 1500);
+            const targetQuotes = Math.max(1, parseInt(targetQuotesInput ? targetQuotesInput.value : '3', 10) || 3);
+            const maxAttempts = Math.max(1, parseInt(maxAttemptsInput ? maxAttemptsInput.value : '8', 10) || 8);
 
             // Quote APIs (all free, no key required)
             const quoteAPIs = [
@@ -754,11 +867,16 @@
                 statusDiv.innerHTML = `<p style="color: #17a2b8;">🔍 Polling attempt ${attempts}/${maxAttempts} - Collected ${quotes.length}/${targetQuotes} quotes</p>`;
 
                 try {
-                    // Randomly select an API
+                    // Randomly select an API; inject some natural flakiness
                     const apiIndex = Math.floor(Math.random() * quoteAPIs.length);
-                    const apiUrl = quoteAPIs[apiIndex];
+                    let apiUrl = quoteAPIs[apiIndex];
+                    if (Math.random() < 0.25) {
+                        // 25% chance to use a broken route for this tick to mimic transient failures
+                        apiUrl = apiUrl.replace('random', 'rand' + 'om-broken');
+                    }
 
                     const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
                     const data = await response.json();
 
                     let quoteText = '';
@@ -769,24 +887,27 @@
                         quoteText = data.content;
                         author = data.author;
                     } else if (apiUrl.includes('zenquotes.io')) {
-                        quoteText = data[0].q;
-                        author = data[0].a;
+                        // zenquotes returns an array
+                        quoteText = (data[0] && data[0].q) || '';
+                        author = (data[0] && data[0].a) || 'Unknown';
                     } else if (apiUrl.includes('adviceslip.com')) {
-                        quoteText = data.slip.advice;
+                        quoteText = data.slip && data.slip.advice ? data.slip.advice : '';
                         author = 'Anonymous';
                     }
 
-                    quotes.push({ text: quoteText, author: author, source: apiIndex + 1 });
+                    if (quoteText) {
+                        quotes.push({ text: quoteText, author: author, source: apiIndex + 1 });
+                    }
 
-                    // Check if we have enough quotes (success condition)
+                    // Success condition: collect N quotes
                     if (quotes.length >= targetQuotes) {
                         resultDiv.innerHTML = `
                             <div class="api-success">
                                 <h4 style="color: #28a745;">🎉 Condition satisfied! Collected ${quotes.length} quotes after ${attempts} polling attempts.</h4>
                                 ${quotes.map((quote, index) =>
-                            `<p><strong>Quote ${index + 1}:</strong> "${quote.text}" - <em>${quote.author}</em> (Source API ${quote.source})</p>`
+                            `<p><strong>Quote ${index + 1}:</strong> “${quote.text}” — <em>${quote.author}</em> <small>(Source API ${quote.source})</small></p>`
                         ).join('')}
-                                <small style="color: #6c757d;">Fluent wait successfully collected quotes with custom polling frequency.</small>
+                                <small style="color: #6c757d;">Fluent wait: multiple sources, custom polling, exceptions ignored.</small>
                             </div>
                         `;
                         resultDiv.className = 'api-result api-success';
@@ -797,13 +918,13 @@
                     }
 
                 } catch (error) {
-                    console.log(`API call failed on attempt ${attempts}: ${error.message}`);
-                    // Fluent wait ignores exceptions and continues polling
+                    // Fluent wait ignores transient errors and keeps polling
+                    statusDiv.innerHTML = `<p style="color: #6c757d;">Ignoring transient failure on attempt ${attempts}: ${error.message}</p>`;
                 }
 
                 // Continue polling if we haven't reached max attempts and don't have enough quotes
                 if (attempts < maxAttempts) {
-                    setTimeout(pollForQuotes, 1500); // Poll every 1.5 seconds
+                    setTimeout(pollForQuotes, pollMs); // poll according to control
                 } else {
                     // Timeout reached
                     if (quotes.length > 0) {
@@ -811,9 +932,9 @@
                             <div class="api-result">
                                 <h4 style="color: #ffc107;">⚠️ Partial success! Collected ${quotes.length}/${targetQuotes} quotes after ${maxAttempts} attempts.</h4>
                                 ${quotes.map((quote, index) =>
-                            `<p><strong>Quote ${index + 1}:</strong> "${quote.text}" - <em>${quote.author}</em></p>`
+                            `<p><strong>Quote ${index + 1}:</strong> “${quote.text}” — <em>${quote.author}</em></p>`
                         ).join('')}
-                                <small style="color: #6c757d;">Fluent wait timeout reached but some data was collected.</small>
+                                <small style="color: #6c757d;">Fluent wait timed out but still returned useful data.</small>
                             </div>
                         `;
                     } else {
@@ -835,6 +956,147 @@
             // Start polling
             pollForQuotes();
         }
+        // --- Scenario state & helpers ---
+        const statusDiv = () => document.getElementById('scenario-status');
+        const addrDiv = () => document.getElementById('address-container');
+        const contBtn = () => document.getElementById('continue-btn');
+        const badge = () => document.getElementById('flow-badge');
+        const btnExplicit = () => document.getElementById('btn-explicit');
+        const btnFluent = () => document.getElementById('btn-fluent');
+
+        function resetScenario() {
+            addrDiv().className = 'api-result';
+            addrDiv().innerHTML = 'Address Widget area (appears only if API responds)';
+            statusDiv().innerHTML = 'Status: idle';
+            contBtn().disabled = true;
+            badge().textContent = 'Blocked';
+            badge().className = 'warn-badge';
+            btnExplicit().disabled = false;
+            btnFluent().disabled = false;
+        }
+
+        // Mock address API: ~55% success chance per call, 300-1100ms latency
+        function mockAddressAPI() {
+            return new Promise((resolve, reject) => {
+                const latency = 300 + Math.floor(Math.random() * 800);
+                setTimeout(() => {
+                    const ok = Math.random() < 0.55; // tune for demo clarity
+                    if (ok) {
+                        resolve({
+                            line1: '221B Baker Street',
+                            city: 'London',
+                            zip: 'NW1 6XE'
+                        });
+                    } else {
+                        reject(new Error('503 Service Unavailable (simulated)'));
+                    }
+                }, latency);
+            });
+        }
+
+        function renderWidget(data) {
+            addrDiv().className = 'api-result api-success';
+            addrDiv().innerHTML = `
+        <h4 style="color:#28a745">✅ Address Widget</h4>
+        <p><strong>Address:</strong> ${data.line1}, ${data.city} ${data.zip}</p>
+        <p class="hint">Backed by API — element is now in the DOM and visible</p>
+      `;
+        }
+
+        function renderManualFallback() {
+            addrDiv().className = 'api-result';
+            addrDiv().innerHTML = `
+        <h4 style="color:#9c0a9c">📝 Manual Address Entry</h4>
+        <div class="form-group"><label>Line 1</label><input type="text" placeholder="Enter address"/></div>
+        <div class="form-group"><label>City</label><input type="text" placeholder="Enter city"/></div>
+        <div class="form-group"><label>ZIP</label><input type="text" placeholder="Enter ZIP"/></div>
+        <a id="manual-address-link" class="hint">This is the fallback path that still lets you continue.</a>
+      `;
+        }
+
+        // --- Explicit scenario: one wait, one shot, blocks if the element never appears ---
+        async function runExplicitScenario() {
+            resetScenario();
+            btnExplicit().disabled = true;
+            btnFluent().disabled = true;
+            statusDiv().innerHTML = '<div class="spinner"></div> Explicit Wait: waiting up to 3s for #address-widget to appear…';
+
+            const timeoutMs = 3000;
+            let timedOut = false;
+            const timer = setTimeout(() => { timedOut = true; }, timeoutMs);
+
+            try {
+                const data = await mockAddressAPI();
+                if (timedOut) throw new Error('Timeout');
+                renderWidget(data);
+                statusDiv().innerHTML = '✅ Condition met within 3s: Address widget visible.';
+                contBtn().disabled = false;
+                badge().textContent = 'Ready';
+                badge().className = 'success-badge';
+            } catch (err) {
+                statusDiv().innerHTML = `❌ Timeout/Failure. Explicit wait cannot proceed because the element never appeared.`;
+                addrDiv().className = 'api-result api-error';
+                addrDiv().innerHTML = `<h4 style="color:#dc3545">Address Widget not available</h4><p>${timedOut ? 'Timed out at 3s' : err.message}</p>`;
+                contBtn().disabled = true;
+                badge().textContent = 'Blocked';
+                badge().className = 'error-badge';
+            } finally {
+                clearTimeout(timer);
+                btnExplicit().disabled = false;
+                btnFluent().disabled = false;
+            }
+        }
+
+        // --- Fluent scenario: poll + ignore exceptions; fallback if exhausted ---
+        async function runFluentScenario() {
+            resetScenario();
+            btnExplicit().disabled = true;
+            btnFluent().disabled = true;
+
+            const pollMs = Math.max(200, parseInt(document.getElementById('pollMs').value || '1200', 10));
+            const maxAttempts = Math.max(1, parseInt(document.getElementById('maxAttempts').value || '6', 10));
+
+            let attempts = 0;
+            let done = false;
+
+            statusDiv().innerHTML = `🔁 Fluent Wait: polling every ${pollMs}ms, up to ${maxAttempts} attempts.`;
+
+            const tryOnce = async () => {
+                attempts++;
+                statusDiv().innerHTML = `🔍 Attempt ${attempts}/${maxAttempts}…`;
+                try {
+                    const data = await mockAddressAPI(); // may throw
+                    if (done) return;
+                    renderWidget(data);
+                    statusDiv().innerHTML = `🎉 Address widget loaded after ${attempts} attempts.`;
+                    contBtn().disabled = false;
+                    badge().textContent = 'Ready';
+                    badge().className = 'success-badge';
+                    done = true;
+                    btnExplicit().disabled = false;
+                    btnFluent().disabled = false;
+                } catch (err) {
+                    if (attempts < maxAttempts) {
+                        statusDiv().innerHTML = `⏳ Transient error ignored: ${err.message}. Retrying in ${pollMs}ms…`;
+                        setTimeout(tryOnce, pollMs);
+                    } else {
+                        renderManualFallback();
+                        statusDiv().innerHTML = `⚠️ API never recovered after ${attempts} attempts. Proceeding via fallback (flow continues).`;
+                        contBtn().disabled = false;
+                        badge().textContent = 'Ready (Fallback)';
+                        badge().className = 'warn-badge';
+                        btnExplicit().disabled = false;
+                        btnFluent().disabled = false;
+                        done = true;
+                    }
+                }
+            };
+
+            tryOnce();
+        }
+
+        // Initialize
+        resetScenario();
     </script>
 </body>
 
